@@ -68,7 +68,7 @@ const deleteUser = (request, response) => {
 
 /** PICTURES */
 const getPictures = (request, response) => {
-    pool.query('SELECT * FROM pictures ORDER BY picture_id ASC', (error, results) => {
+    pool.query('SELECT * FROM pictures ORDER BY picture_id DESC', (error, results) => {
       if (error) {
         throw error
       }

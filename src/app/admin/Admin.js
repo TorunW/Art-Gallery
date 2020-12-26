@@ -7,36 +7,24 @@ import $ from 'jquery';
 
 function Admin(props) {
 
-  const [dbTables, setDbTables] = useState([]);
+  const [dbTables, setDbTables] = useState(['pictures', 'messages']);
   const [currentSection, setCurrentSection] = useState('admin');
 
-  useEffect(() => {
-    getDbTables()
-  },[])
-
-  function getDbTables() {
-    fetch('/tables')
-    .then(res => res.text())
-    .then(res =>{
-      console.log(JSON.parse(res));
-      setDbTables(JSON.parse(res));
-    })
-  }
 
   const navItemsDisplay = dbTables.map((table, index) => {
     let menuItemClassName = 'item';
-    if (currentSection === table.table_name) menuItemClassName += ' active';
+    if (currentSection === table) menuItemClassName += ' active';
     return (
-      <a className={menuItemClassName} onClick={() => setCurrentSection(table.table_name)}>{table.table_name}</a>
+      <a className={menuItemClassName} onClick={() => setCurrentSection(table)}>{table}</a>
     )
   })
 
   let contentDisplay = <div>Hello im admin homepage</div>
   if (currentSection !== "admin"){
     contentDisplay = dbTables.map((table, index) => {
-      if (currentSection === table.table_name) {
+      if (currentSection === table) {
         return(
-          <DBTableRender fetchUrl={"/" + table.table_name}/>
+          <DBTableRender key={index} fetchUrl={"/" + table}/>
         )
       }
     })
@@ -83,13 +71,13 @@ function DBTableRender(props) {
     }
 
     const columnsDisplay = columns.map((column, index) => (
-        <th scope="col">
+        <th key={index} scope="col">
             {column}
         </th>
     ))
 
     const itemsDisplay = items.map((item, index) => (
-      <tr>
+      <tr key={index}>
         {
           columns.map((column, index) => {
 
@@ -100,7 +88,7 @@ function DBTableRender(props) {
                 )
             }
             return(
-                <td>
+                <td key={index}>
                   {cellDisplay}
                 </td>
               )
@@ -232,40 +220,55 @@ function FormField(props) {
     </React.Fragment>
   )
 
-  if (props.column === 'filename') {
-    formFieldDisplay = <FileUploader updateInput={updateInput}/>  
-  } else if (props.column === 'picture_type') {
-    formFieldDisplay = (
-      <React.Fragment>
-        <label>Gallery</label>
-        <select onChange={e => updateInput(e.target.value)}>
-          <option value="">Gallery</option>
-          <option value="paintings">Tavlor</option>
-          <option value="sculptures">Skulpturer</option>
-        </select>
-      </React.Fragment>
-    )
-  } else if (props.column === 'description') {
-    formFieldDisplay = (
-      <React.Fragment>
-        <label>Beskrivning</label>
-        <textarea onChange={e => updateInput(e.target.value)} rows="2">
-          {data}
-        </textarea>
-      </React.Fragment>
-    )
-  } else if (props.column === 'price') {
-    formFieldDisplay = (
-      <React.Fragment>
-        <label>Pris</label>
-        <div class="ui right labeled input">
-          <input value={data} onChange={e => updateInput(e.target.value)} type="number"/>
-          <div class="ui basic label">
-            kr
+  switch (props.column) {
+    case 'filename': 
+      formFieldDisplay = (
+        <FileUploader updateInput={updateInput}/>
+      )
+    break;  
+    case 'picture_type':
+      formFieldDisplay = (
+        <React.Fragment>
+          <label>Gallery</label>
+          <select onChange={e => updateInput(e.target.value)}>
+            <option value="">Gallery</option>
+            <option value="paintings">Tavlor</option>
+            <option value="sculpture">Skulpturer</option>   
+          </select>
+        </React.Fragment>
+      )
+    break;
+    case 'description':
+      formFieldDisplay = (
+        <React.Fragment>
+          <label>Beskrivning</label>
+          <textarea onChange={e => updateInput(e.target.value)} rows="2">
+            {data}
+          </textarea>
+        </React.Fragment>
+      )
+      break;
+    case 'price':
+      formFieldDisplay = (
+        <React.Fragment>
+          <label>Pris</label>
+          <div class="ui right labeled input">
+            <input value={data} onChange={e => updateInput(e.target.value)} type="number"/>
+            <div class="ui basic label">
+              kr
+            </div>
           </div>
-        </div>
+        </React.Fragment>
+      )
+    break;
+    default:
+    formFieldDisplay = (
+      <React.Fragment>
+        <label>Titel</label>
+        <input value={data} onChange={e => updateInput(e.target.value)} placeholder={props.column} type="text"/>
       </React.Fragment>
     )
+    break;
   }
 
   return(

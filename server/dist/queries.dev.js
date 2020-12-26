@@ -75,7 +75,7 @@ var deleteUser = function deleteUser(request, response) {
 
 
 var getPictures = function getPictures(request, response) {
-  pool.query('SELECT * FROM pictures ORDER BY picture_id ASC', function (error, results) {
+  pool.query('SELECT * FROM pictures ORDER BY picture_id DESC', function (error, results) {
     if (error) {
       throw error;
     }

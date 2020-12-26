@@ -65,7 +65,7 @@ function SectionsContainer(props) {
 
   const sectionsDisplay = props.navigation.map((section,index) => {
       let sectionHtmlDisplay = (
-        <section id={section.nav_link}>
+        <section key={index} id={section.nav_link}>
           <h2>{section.title}</h2>
         </section>
       )
@@ -141,15 +141,29 @@ function PaintingsSection(props) {
     })
   }
 
-  const galleryDisplay = paintings.map((subArray) => (
-    <div className="container">
+  const galleryDisplay = paintings.map((subArray, subIndex) => (
+    <div key={subIndex} className="container">
       {
-        subArray.map((painting) => (
-          <div className="box">
+        subArray.map((painting, index) => (
+          <div key={index} className="box">
             <img src={painting.filename}/>
-            <span>text</span>
+            <div className="ui grid my-grid">
+            <div className="twelve wide column twelve-wide">
+              <h2>
+                {painting.caption}
+              </h2>
+              <p>
+                {painting.description}
+              </p>
+            </div>
+            <div className="four wide column four-wide">
+              <span>
+                {painting.price + " kr"}
+              </span>
+            </div>
+          </div>  
           </div>
-        ))
+        ))  
       }
     </div>
   ))
@@ -162,6 +176,7 @@ function PaintingsSection(props) {
       showDownloadButton: false
     }
   }
+  
 
   return(
     <section id="paintings">
@@ -190,13 +205,28 @@ function SculpturesSection(props) {
     })
   }
  
-  const galleryDisplay = sculptures.map((subArray) => (
-    <div className="container">
+  const galleryDisplay = sculptures.map((subArray, subIndex) => (
+    <div key={subIndex} className="container">
     {
-      subArray.map((sculpture) => (
-        <div className="box">
+      subArray.map((sculpture, index) => (
+        <div key={index} className="box">
           <img src={sculpture.filename}/>
-          <span>text</span>
+          <div className="ui grid my-grid">
+            <div className="twelve wide column twelve-wide">
+              <h2>
+                {sculpture.caption}
+              </h2>
+              <p>
+                {sculpture.description}
+              </p>
+            </div>
+            <div className="four wide column four-wide">
+              <span>
+                {sculpture.price + " kr"}
+              </span>
+            </div>
+          </div>
+            
         </div>
         ))
       }
@@ -227,7 +257,7 @@ function AboutSection(props) {
 
   return (
    <section id="about">
-     <div className="title"><h1>About me</h1></div>
+     <div className="title"><h1>Om mig</h1></div>
 
      <div class="row">
        <div class="col-4">

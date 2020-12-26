@@ -29,14 +29,15 @@ function FileUpload(props) {
                    })
             props.updateInput(res.data.path)
         }).catch(err => console.log(err))}
+
     return (
         <div id="file-upload-container">
             <div className="file-upload">
                 <input type="file" ref={el} onChange={handleChange} />
-                <div className="progessBar" style={{ width: progress }}>
+                <div className="ui progress bar progessBar" style={{ width: progress }}>
                    {progress}
                 </div>
-                <button onClick={uploadFile} className="upbutton">
+                <button onClick={uploadFile} className="ui blue button upbutton">
                     Upload
                 </button>
             <hr />

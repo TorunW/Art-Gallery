@@ -15,14 +15,12 @@ app.use(
   })
 )
 app.use(express.static(__dirname + '/build'));
+app.use(express.static(__dirname + '/uploads'));
+
 app.use(fileUpload());
 
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
-app.get('/admin/', function (req, res) {
+app.get(['/','/admin/', '/sculptures', '/paintings', '/contact'], function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
@@ -50,16 +48,16 @@ app.post('/upload', (req, res) => {
   if (!req.files) {
       return res.status(500).send({ msg: "file is not found" })
   }
-      // accessing the file
+  // accessing the file
   const myFile = req.files.file;
   //  mv() method places the file inside public directory
-  myFile.mv(`${__dirname}/${myFile.name}`, function (err) {
+  myFile.mv(`${__dirname}/uploads/pictures/${myFile.name}`, function (err) {
       if (err) {
           console.log(err)
           return res.status(500).send({ msg: "Error occured" });
       }
       // returing the response with file path and name
-      return res.send({name: myFile.name, path: `/${myFile.name}`});
+      return res.send({name: myFile.name, path: `/pictures/${myFile.name}`});
   });
 })
 

@@ -20,11 +20,9 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(express["static"](__dirname + '/build'));
+app.use(express["static"](__dirname + '/uploads'));
 app.use(fileUpload());
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-app.get('/admin/', function (req, res) {
+app.get(['/', '/admin/', '/sculptures', '/paintings', '/contact'], function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 app.get('/users', db.getUsers);
@@ -50,7 +48,7 @@ app.post('/upload', function (req, res) {
 
   var myFile = req.files.file; //  mv() method places the file inside public directory
 
-  myFile.mv("".concat(__dirname, "/").concat(myFile.name), function (err) {
+  myFile.mv("".concat(__dirname, "/uploads/pictures/").concat(myFile.name), function (err) {
     if (err) {
       console.log(err);
       return res.status(500).send({
@@ -61,7 +59,7 @@ app.post('/upload', function (req, res) {
 
     return res.send({
       name: myFile.name,
-      path: "/".concat(myFile.name)
+      path: "/pictures/".concat(myFile.name)
     });
   });
 });

@@ -16,7 +16,9 @@ header {
   position: fixed;
   width: 100%;
   top: 0;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #ccc;
+  z-index: 1000;
 }
 header h1 {
   margin: 15px 0 10px 0 !important;
@@ -72,53 +74,51 @@ section .description p {
   font-weight: bold;
 }
 /*Paintings gallery*/
-#paintings .container,
-#sculptures .container {
+.sub-gallery .container {
   display: flex;
   width: 100%;
   padding: 4% 2%;
   box-sizing: border-box;
   height: 90vh;
 }
-#paintings .container .box,
-#sculptures .container .box {
+.sub-gallery .container .box {
   flex: 1;
   overflow: hidden;
   transition: 0.5s;
   margin: 0 2%;
   box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
   line-height: 0;
+  background-color: #e0e0e0;
 }
-#paintings .container .box:hover,
-#sculptures .container .box:hover {
-  flex: 1 1 50%;
+.sub-gallery .container .box:hover {
+  flex: 1 1 50% !important;
 }
-#paintings .container .box:hover > img,
-#sculptures .container .box:hover > img {
-  width: 100%;
-  object-fit: contain;
+.sub-gallery .container .box:hover > img {
+  width: 100% !important;
+  object-fit: contain !important;
 }
-#paintings .container .box > img,
-#sculptures .container .box > img {
+.sub-gallery .container .box .my-grid {
+  background-color: white;
+  margin: 0px;
+}
+.sub-gallery .container .box > img {
   width: 200%;
-  height: calc(100% - 10vh);
+  height: calc(100% - 12vh);
   object-fit: cover;
   transition: 0.5s;
 }
-#paintings .container h2,
-#sculptures .container h2 {
+.sub-gallery .container h2 {
+  margin-top: 0px;
   margin-bottom: 0px !important;
+  font-size: 18px;
 }
-#paintings .container p,
-#sculptures .container p {
-  font-size: 20px;
+.sub-gallery .container p {
+  font-size: 16px;
 }
-#paintings .container .four-wide,
-#sculptures .container .four-wide {
+.sub-gallery .container .four-wide {
   margin-top: 45px;
 }
-#paintings .container .four-wide span,
-#sculptures .container .four-wide span {
+.sub-gallery .container .four-wide span {
   font-size: 20px;
   font-weight: bold;
 }
@@ -133,4 +133,9 @@ section .description p {
 }
 #contact .btn-primary {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.ui.modal:not(.compact) {
+  width: 230px !important;
+  position: relative !important;
+  text-align: center !important;
 }

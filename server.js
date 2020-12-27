@@ -2,9 +2,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
-const db = require('./server/queries');
+const db = require('./routes/queries');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const fs = require('fs');
 
 
 app.use(cors());
@@ -34,7 +35,8 @@ app.delete('/users/:id', db.deleteUser)
 app.get('/pictures', db.getPictures)
 app.get('/pictures/:picture_type', db.getPicturesByType)
 app.post('/pictures', db.createPicture)
-
+app.delete('/pictures/:id', db.deletePicture)
+app.put('/pictures/:id', db.updatePicture)
 
 app.get('/navigation', db.getNavigation)
 
@@ -59,6 +61,16 @@ app.post('/upload', (req, res) => {
       // returing the response with file path and name
       return res.send({name: myFile.name, path: `/pictures/${myFile.name}`});
   });
+})
+
+app.post('/delete', (req, res) => {
+  try {
+    fs.unlinkSync('uploads/' +req.body.path)
+    //file removed
+    return res.send({msg:'success'});
+  } catch(err) {
+    console.error(err)
+  }
 })
 
 app.listen(process.env.PORT || 8080, () => {

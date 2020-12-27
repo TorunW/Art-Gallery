@@ -8,6 +8,7 @@ import {breakArrayIntoChunksHelper} from './helpers';
 import { Link, Route, Switch } from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import Admin from './admin/Admin';
+import SubGallery from './gallery/SubGallery';
 
 function App(props) {
 
@@ -126,128 +127,18 @@ function SectionsContainer(props) {
 
 function PaintingsSection(props) {
 
-  const [paintings, setPaintings] = useState([])
-
-  useEffect(() => {
-    getPaintings()
-  },[])
-
-  function getPaintings() {
-    fetch('/pictures/paintings')
-    .then(res => res.text())
-    .then(res =>{
-      const newPaintings = breakArrayIntoChunksHelper(2, JSON.parse(res))
-      setPaintings(newPaintings);
-    })
-  }
-
-  const galleryDisplay = paintings.map((subArray, subIndex) => (
-    <div key={subIndex} className="container">
-      {
-        subArray.map((painting, index) => (
-          <div key={index} className="box">
-            <img src={painting.filename}/>
-            <div className="ui grid my-grid">
-            <div className="twelve wide column twelve-wide">
-              <h2>
-                {painting.caption}
-              </h2>
-              <p>
-                {painting.description}
-              </p>
-            </div>
-            <div className="four wide column four-wide">
-              <span>
-                {painting.price + " kr"}
-              </span>
-            </div>
-          </div>  
-          </div>
-        ))  
-      }
-    </div>
-  ))
-
-  const options={
-    thumbnails:{
-      showThumbnails:false
-    },
-    buttons: {
-      showDownloadButton: false
-    }
-  }
-  
-
   return(
-    <section id="paintings">
-        <SRLWrapper 
-         options={options}>
-          <div id="gallery-pictures">{galleryDisplay}</div>
-        </SRLWrapper>
+    <section id='paintings'>
+      <SubGallery pictureType={'paintings'}/>
     </section>
   )
 }
 
 function SculpturesSection(props) {
 
-  const [sculptures, setSculptures] = useState([])
-
-  useEffect(() => {
-    getSculptures()
-  },[])
-
-  function getSculptures() {
-    fetch('/pictures/sculpture')
-    .then(res => res.text())
-    .then(res =>{
-      const newSculptures = breakArrayIntoChunksHelper(2, JSON.parse(res))
-      setSculptures(newSculptures);
-    })
-  }
- 
-  const galleryDisplay = sculptures.map((subArray, subIndex) => (
-    <div key={subIndex} className="container">
-    {
-      subArray.map((sculpture, index) => (
-        <div key={index} className="box">
-          <img src={sculpture.filename}/>
-          <div className="ui grid my-grid">
-            <div className="twelve wide column twelve-wide">
-              <h2>
-                {sculpture.caption}
-              </h2>
-              <p>
-                {sculpture.description}
-              </p>
-            </div>
-            <div className="four wide column four-wide">
-              <span>
-                {sculpture.price + " kr"}
-              </span>
-            </div>
-          </div>
-            
-        </div>
-        ))
-      }
-    </div>
-  ))
-
-  const options={
-    thumbnails:{
-      showThumbnails:false
-    },
-    buttons: {
-      showDownloadButton: false
-    }
-  }
-
   return(
-    <section id="sculptures">
-        <SRLWrapper 
-         options={options}>
-          <div id="gallery-pictures">{galleryDisplay}</div>
-        </SRLWrapper>
+    <section id='sculptures'>
+      <SubGallery pictureType={'sculpture'}/>
     </section>
   )
 }

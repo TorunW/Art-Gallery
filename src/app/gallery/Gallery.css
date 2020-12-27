@@ -94,22 +94,3 @@
 .css-pp29ct {
   margin-top: 50px !important;
 }
-/*#gallery #slideshow img#next-image {
-    opacity: 0;
-  }
-
-  #gallery #slideshow img#next-image.in-transition {
-    opacity: 1;
-  }
-
-  #gallery #slideshow img.in-transition {
-    opacity: 0;
-  }*/
-#paintings .box > img,
-#sculptures .box > img {
-  width: 200%;
-  height: calc(100% - 10vh);
-  object-fit: cover;
-  transition: 0.5s;
-  cursor: pointer;
-}

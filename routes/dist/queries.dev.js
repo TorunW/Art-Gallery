@@ -112,6 +112,17 @@ var createPicture = function createPicture(request, response) {
     response.status(201).send("Picture added with ID: ".concat(response.insertId));
   });
 };
+
+var deletePicture = function deletePicture(request, response) {
+  var id = parseInt(request.params.id);
+  pool.query('DELETE FROM pictures WHERE picture_id = $1', [id], function (error, results) {
+    if (error) {
+      throw error;
+    }
+
+    response.status(200).send("Picture deleted with ID: ".concat(id));
+  });
+};
 /** PICTURES */
 
 /**NAVIGATION */
@@ -178,10 +189,11 @@ module.exports = {
   updateUser: updateUser,
   deleteUser: deleteUser,
   getPictures: getPictures,
+  getPicturesByType: getPicturesByType,
   createPicture: createPicture,
+  deletePicture: deletePicture,
   getNavigation: getNavigation,
   createMessage: createMessage,
   getMessages: getMessages,
-  getPicturesByType: getPicturesByType,
   getTableNames: getTableNames
 };

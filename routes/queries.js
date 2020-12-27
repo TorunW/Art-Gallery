@@ -79,7 +79,7 @@ const getPictures = (request, response) => {
 const getPicturesByType = (request, response) => {
   const picture_type = request.params.picture_type
   console.log(picture_type)
-  pool.query('SELECT * FROM pictures WHERE picture_type = $1', [picture_type], (error, results) => {
+  pool.query('SELECT * FROM pictures WHERE picture_type = $1 ORDER BY picture_id DESC', [picture_type], (error, results) => {
     if (error) {
       throw error
     }
@@ -89,7 +89,6 @@ const getPicturesByType = (request, response) => {
 
 const createPicture = (request, response) => {
   const { caption, description, filename, price, picture_type } = request.body
-  console.log(caption, description, filename, price, picture_type)
   pool.query('INSERT INTO pictures (caption, description, filename, price, picture_type ) VALUES ($1, $2, $3, $4, $5 )', [caption, description, filename, price, picture_type], (error, results) => {
     if (error) {
       throw error   
@@ -97,6 +96,32 @@ const createPicture = (request, response) => {
     response.status(201).send(`Picture added with ID: ${response.insertId}`)
   })
 } 
+
+const deletePicture = (request, response) => {
+  const id = parseInt(request.params.id)
+
+  pool.query('DELETE FROM pictures WHERE picture_id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).send(`Picture deleted with ID: ${id}`)
+  })
+}
+
+const updatePicture = (request, response) => {
+  const id = parseInt(request.params.id)
+  const { caption, description, filename, price, picture_type } = request.body
+  pool.query(
+    'UPDATE pictures SET caption = $2, description = $3, filename =$4, price = $5, picture_type = $6 WHERE picture_id = $1',
+    [id, caption, description, filename, price, picture_type],
+    (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send(`Picture modified with ID: ${id}`)
+    }
+  )
+}
 
 /** PICTURES */
 
@@ -149,11 +174,17 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
+
     getPictures,
+    getPicturesByType,
     createPicture,
+    deletePicture,
+    updatePicture,
+
     getNavigation,
+
     createMessage,
     getMessages,
-    getPicturesByType,
+    
     getTableNames
 }

@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { Link, Route, Switch } from "react-router-dom";
 import './Admin.css';
 import FileUploader from '../partials/file-uploader';
 import $ from 'jquery';
+import { Button, Header, Icon, Modal } from 'semantic-ui-react';
+
 
 
 function Admin(props) {
@@ -12,10 +13,10 @@ function Admin(props) {
 
 
   const navItemsDisplay = dbTables.map((table, index) => {
-    let menuItemClassName = 'item';
-    if (currentSection === table) menuItemClassName += ' active';
+    let menuItemclassName = 'item';
+    if (currentSection === table) menuItemclassName += ' active';
     return (
-      <a className={menuItemClassName} onClick={() => setCurrentSection(table)}>{table}</a>
+      <a className={menuItemclassName} onClick={() => setCurrentSection(table)}>{table}</a>
     )
   })
 
@@ -30,14 +31,14 @@ function Admin(props) {
     })
   }
     
-  let mainMenuItemClassName = 'item';
-  if (currentSection === "admin") mainMenuItemClassName += ' active';
+  let mainMenuItemclassNameName = 'item';
+  if (currentSection === "admin") mainMenuItemclassNameName += ' active';
 
   return(
     <section id="admin">
       <nav>
         <div className="ui secondary pointing menu">
-          <a className={mainMenuItemClassName} onClick={() => setCurrentSection("admin")}>Admin main</a>
+          <a className={mainMenuItemclassNameName} onClick={() => setCurrentSection("admin")}>Admin main</a>
           {navItemsDisplay}
         </div>
       </nav>
@@ -51,12 +52,20 @@ function DBTableRender(props) {
     const [items, setItems] = useState([])
     const [columns, setColumns] = useState([])
     const [showForm, setShowForm] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [selectedItem, setSelectedItem] = useState(null)
 
     useEffect(() => {
         getItems()
     },[])
 
+    useEffect(() => {
+      if (selectedItem !== null) setShowForm(true)
+  },[selectedItem])
+
+
     function getItems()  {
+        setLoading(true)
         fetch(props.fetchUrl)
         .then(res => res.text())
         .then(res =>{
@@ -65,11 +74,37 @@ function DBTableRender(props) {
           for (var i in newItems[0]){
             columnArray.push(i)
           }
-            setColumns(columnArray)
-           setItems(JSON.parse(res));
+          setColumns(columnArray)
+          setItems(JSON.parse(res));
+          window.scrollTo({top:0,behavior:'smooth'})
+          setLoading(false)
         })
     }
 
+    function deleteItem(item) {
+
+      setLoading(true)
+      $.ajax({
+        url:'/delete',
+        type:'POST',
+        data:{path:item.filename}
+      }).done(function(res){
+        console.log(res)
+        $.ajax({
+          url:'http://localhost:8080/pictures/' + item.picture_id,
+          type:'DELETE'
+        }).done(function(res) {
+          console.log(res)
+          getItems();
+        })
+      })
+    }
+
+    function onFinishFormSubmit() {
+      setShowForm(false)
+      getItems()
+    }
+ 
     const columnsDisplay = columns.map((column, index) => (
         <th key={index} scope="col">
             {column}
@@ -82,9 +117,9 @@ function DBTableRender(props) {
           columns.map((column, index) => {
 
             let cellDisplay = item[column];
-            if (column === 'update') {
+            if (column === 'filename') {
                 cellDisplay =(
-                    <span>hello cbcdkjsjkn</span>
+                  <img src={item[column]} width="50px" height="50px"/>
                 )
             }
             return(
@@ -95,19 +130,41 @@ function DBTableRender(props) {
           })
         }
         <td>
-          <TableRowUserMenu/>
+          <TableRowUserMenu
+            item={item}
+            deleteItem={deleteItem}
+            setSelectedItem={setSelectedItem}
+          />
         </td>
       </tr>
     ))
 
     let tableDisplay, formDisplay;
     if (showForm === false) {
-      tableDisplay = (
-        <React.Fragment>
+      let addButtonDisplay;
+      if (props.fetchUrl === '/pictures') {
+        addButtonDisplay = (
           <a onClick={() => setShowForm(true)}className="ui green basic button">
             <i className="plus icon"></i>
-            Add
+            Lägg till bild
           </a>
+        )
+      }
+
+      let loadingDisplay;
+      if (loading === true) {
+        loadingDisplay = (
+          <div class="ui active inverted dimmer">
+            <div class="ui text loader"><b>loading...</b></div>
+          </div>
+      )
+      }
+
+      tableDisplay = (
+        <React.Fragment>
+          {addButtonDisplay}
+          <div className="dimmable">
+            {loadingDisplay}
             <table className="ui celled table">
             <thead>
                 <tr>
@@ -119,12 +176,17 @@ function DBTableRender(props) {
             {itemsDisplay}
             </tbody>
             </table>
+          </div>
         </React.Fragment>
       )
     } else {
+      console.log("selected item on parent")
+      console.log(selectedItem);
       formDisplay = (
         <AddItemForm
           columns={columns}
+          selectedItem={selectedItem}
+          onFinishFormSubmit={onFinishFormSubmit}
         />
       )
     }
@@ -138,22 +200,55 @@ function DBTableRender(props) {
 }
 
 function TableRowUserMenu(props) {
+
+  const [open, setOpen] = React.useState(false)
+
+  function onApprovedDeleteClick() {
+    setOpen(false)
+
+    props.deleteItem(props.item)
+  }
   
   return(
     <div className="table-row-user-menu">
-      <button className="ui icon blue button">
+      <button className="ui icon blue button" onClick={()=> props.setSelectedItem(props.item)}>
         <i className="pencil alternate icon"></i>
       </button>
-      <button className="ui icon red button">
-        <i className="trash icon"></i>
-      </button>
-    </div>
+        <Modal
+          basic
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+          size='tiny'
+          trigger={<Button icon color='red'><Icon name='trash' /></Button>}
+        >
+          <Header icon>
+            <Icon name='trash alternate outline' />
+              Ta bort bild
+            </Header>
+          <Modal.Content>
+            <p>
+              Vill du radera den här bilden?
+            </p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button basic color='red' inverted onClick={() => setOpen(false)}>
+              <Icon name='remove' /> Nej
+            </Button>
+            <Button color='green' inverted onClick={() => onApprovedDeleteClick()}>
+              <Icon name='checkmark' /> Ja
+            </Button>
+          </Modal.Actions>
+        </Modal>
+        </div>
   )
 }
 
 function AddItemForm(props) {
 
-  const [formData, setFormData] = useState({})
+  let initFormData = props.selectedItem !== null ? props.selectedItem : {};
+  const [formData, setFormData] = useState(initFormData)
+  console.log(props)
 
   function onUpdateFormField(obj) {
     const newFormData = {
@@ -164,12 +259,21 @@ function AddItemForm(props) {
 
   function onFormSubmit() {
     console.log(formData);
+    let ajaxUrl = '/pictures';
+    let ajaxType = 'POST';
+    if (props.selectedItem !== null) {
+      console.log("hello what why?");
+      ajaxUrl += '/' + formData.picture_id;
+      ajaxType = 'PUT'
+    }
+
     $.ajax({
-      url:'/pictures',
-      type:'POST',
+      url:ajaxUrl,
+      type:ajaxType,
       data: formData
     }).done(function(res) {
       console.log(res)
+      props.onFinishFormSubmit()
     })
   }
 
@@ -178,10 +282,13 @@ function AddItemForm(props) {
     let showFormField = true;
     if (column === 'created_at' || column.indexOf('_id') > -1 ) showFormField = false;
     if (showFormField === true) {
+      let defaultValue = null;
+      if (props.selectedItem !== null) defaultValue = props.selectedItem[column]
       return(
         <FormField 
           key={index}
           column={column}
+          defaultValue={defaultValue}
           onUpdateFormField={onUpdateFormField}
         />
       )
@@ -189,19 +296,23 @@ function AddItemForm(props) {
    
   })
 
+
   return(
     <div className="add-item-form">
       <div className="ui form">
         {formFieldsDisplay}
-        <button className="ui button" onClick={onFormSubmit}>Lägg till bild</button>
+        <button className="ui button" onClick={onFormSubmit}>
+          {props.selectedItem !== null ? "Uppdatera bild" : "Lägg till Bild"}
+        </button>
       </div>
     </div>
   )
 }
 
 function FormField(props) {
-
-  const [ data, setData ] = useState("")
+  
+  let initData = props.defaultValue !== null ? props.defaultValue : '';
+  const [ data, setData ] = useState(initData)
 
   useEffect (()=>{
     let obj = {};
@@ -222,9 +333,15 @@ function FormField(props) {
 
   switch (props.column) {
     case 'filename': 
-      formFieldDisplay = (
-        <FileUploader updateInput={updateInput}/>
-      )
+      if (props.defaultValue === null) {
+        formFieldDisplay = (
+          <div id="form-img-container">
+            <FileUploader updateInput={updateInput}/>
+          </div>
+        )
+      } else {
+        formFieldDisplay = <div id="form-img-container"><img src={props.defaultValue}/></div>
+      }
     break;  
     case 'picture_type':
       formFieldDisplay = (
@@ -232,8 +349,8 @@ function FormField(props) {
           <label>Gallery</label>
           <select onChange={e => updateInput(e.target.value)}>
             <option value="">Gallery</option>
-            <option value="paintings">Tavlor</option>
-            <option value="sculpture">Skulpturer</option>   
+            <option selected={props.defaultValue === "paintings" ? "selected" : ""} value="paintings">Tavlor</option>
+            <option selected={props.defaultValue === "sculptures" ? "selected" : ""} value="sculpture">Skulpturer</option>   
           </select>
         </React.Fragment>
       )
@@ -252,9 +369,9 @@ function FormField(props) {
       formFieldDisplay = (
         <React.Fragment>
           <label>Pris</label>
-          <div class="ui right labeled input">
-            <input value={data} onChange={e => updateInput(e.target.value)} type="number"/>
-            <div class="ui basic label">
+          <div className="ui right labeled input">
+            <input value={data} onChange={e => updateInput(e.target.value)} type="text"/>
+            <div className="ui basic label">
               kr
             </div>
           </div>

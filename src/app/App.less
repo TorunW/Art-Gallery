@@ -19,7 +19,9 @@
     position: fixed;
     width: 100%;
     top: 0;
-    background-color:rgba(255,255,255,0.75);
+    background-color:rgba(255,255,255,0.90);
+    border-bottom: 1px solid #ccc;
+    z-index: 1000;
 
     h1 {
         margin: 15px 0 10px 0 !important;
@@ -89,7 +91,7 @@
   }
   
    /*Paintings gallery*/
-   #paintings, #sculptures {
+   .sub-gallery {
 
     .container {
       display: flex;
@@ -105,30 +107,39 @@
         margin: 0 2%;
         box-shadow: 0 20px 30px rgba(0,0,0,.1);
         line-height: 0;
+        background-color: rgb(224, 224, 224);
+
 
         &:hover {
-          flex: 1 1 50%; 
+          flex: 1 1 50% !important; 
 
           > img {
-            width: 100%;
-            object-fit: contain;
+            width: 100% !important;
+            object-fit: contain !important;
           }
+        }
+
+        .my-grid {
+          background-color: white;
+          margin: 0px;
         }
 
         > img {
           width: 200%;
-          height: calc(100% - 10vh);
+          height: calc(100% - 12vh);
           object-fit: cover; 
           transition: .5s;
         }
       }
 
       h2 {
+        margin-top: 0px;
         margin-bottom: 0px !important;
+        font-size: 18px;
       }
 
       p {
-        font-size: 20px;
+        font-size: 16px;
       }
       
       .four-wide {
@@ -156,3 +167,9 @@
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
 }
+
+.ui.modal:not(.compact) {
+  width: 230px !important;
+  position: relative !important;
+  text-align: center !important;
+  }

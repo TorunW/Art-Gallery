@@ -91,7 +91,7 @@ function DBTableRender(props) {
       }).done(function(res){
         console.log(res)
         $.ajax({
-          url:'http://localhost:8080/pictures/' + item.picture_id,
+          url:'http://localhost:80/pictures/' + item.picture_id,
           type:'DELETE'
         }).done(function(res) {
           console.log(res)

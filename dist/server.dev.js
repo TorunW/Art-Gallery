@@ -14,6 +14,8 @@ var cors = require('cors');
 
 var fileUpload = require('express-fileupload');
 
+var fs = require('fs');
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -34,6 +36,7 @@ app.get('/pictures', db.getPictures);
 app.get('/pictures/:picture_type', db.getPicturesByType);
 app.post('/pictures', db.createPicture);
 app["delete"]('/pictures/:id', db.deletePicture);
+app.put('/pictures/:id', db.updatePicture);
 app.get('/navigation', db.getNavigation);
 app.post('/messages', db.createMessage);
 app.get('/messages', db.getMessages);
@@ -64,6 +67,17 @@ app.post('/upload', function (req, res) {
     });
   });
 });
-app.listen(process.env.PORT || 8080, function () {
+app.post('/delete', function (req, res) {
+  try {
+    fs.unlinkSync('uploads/' + req.body.path); //file removed
+
+    return res.send({
+      msg: 'success'
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
+app.listen(process.env.PORT || 80, function () {
   console.log('YO YO YO BIACH');
 });

@@ -73,7 +73,7 @@ app.post('/delete', (req, res) => {
   }
 })
 
-app.listen(process.env.PORT || 8080, () => {
+app.listen(process.env.PORT || 80, () => {
   console.log('YO YO YO BIACH');
 });
 

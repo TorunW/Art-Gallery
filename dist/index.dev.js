@@ -63,6 +63,6 @@ app.post('/upload', function (req, res) {
     });
   });
 });
-app.listen(process.env.PORT || 8080, function () {
+app.listen(process.env.PORT || 80, function () {
   console.log('YO YO YO BIACH');
 });

@@ -78,6 +78,12 @@ app.post('/delete', function (req, res) {
     console.error(err);
   }
 });
+var port = process.env.PORT;
+
+if (port == null || port == "") {
+  port = 8000;
+}
+
 app.listen(process.env.PORT || 80, function () {
   console.log('YO YO YO BIACH');
 });

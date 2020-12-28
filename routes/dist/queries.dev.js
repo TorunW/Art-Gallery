@@ -3,10 +3,10 @@
 var Pool = require('pg').Pool;
 
 var pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'Charlee',
-  password: 'Hallo',
+  user: 'ngqpvjtudczeqx',
+  host: 'ec2-54-228-209-117.eu-west-1.compute.amazonaws.com',
+  database: 'dfo7krr81q3397',
+  password: '50f756419ad39c5faf2a81ed5c434908a32823015167d2dc263eacf52e6039e7',
   port: 5432
 });
 /** USERS */
@@ -87,7 +87,7 @@ var getPictures = function getPictures(request, response) {
 var getPicturesByType = function getPicturesByType(request, response) {
   var picture_type = request.params.picture_type;
   console.log(picture_type);
-  pool.query('SELECT * FROM pictures WHERE picture_type = $1', [picture_type], function (error, results) {
+  pool.query('SELECT * FROM pictures WHERE picture_type = $1 ORDER BY picture_id DESC', [picture_type], function (error, results) {
     if (error) {
       throw error;
     }
@@ -103,7 +103,6 @@ var createPicture = function createPicture(request, response) {
       filename = _request$body3.filename,
       price = _request$body3.price,
       picture_type = _request$body3.picture_type;
-  console.log(caption, description, filename, price, picture_type);
   pool.query('INSERT INTO pictures (caption, description, filename, price, picture_type ) VALUES ($1, $2, $3, $4, $5 )', [caption, description, filename, price, picture_type], function (error, results) {
     if (error) {
       throw error;
@@ -121,6 +120,23 @@ var deletePicture = function deletePicture(request, response) {
     }
 
     response.status(200).send("Picture deleted with ID: ".concat(id));
+  });
+};
+
+var updatePicture = function updatePicture(request, response) {
+  var id = parseInt(request.params.id);
+  var _request$body4 = request.body,
+      caption = _request$body4.caption,
+      description = _request$body4.description,
+      filename = _request$body4.filename,
+      price = _request$body4.price,
+      picture_type = _request$body4.picture_type;
+  pool.query('UPDATE pictures SET caption = $2, description = $3, filename =$4, price = $5, picture_type = $6 WHERE picture_id = $1', [id, caption, description, filename, price, picture_type], function (error, results) {
+    if (error) {
+      throw error;
+    }
+
+    response.status(200).send("Picture modified with ID: ".concat(id));
   });
 };
 /** PICTURES */
@@ -143,10 +159,10 @@ var getNavigation = function getNavigation(request, response) {
 
 
 var createMessage = function createMessage(request, response) {
-  var _request$body4 = request.body,
-      name = _request$body4.name,
-      email = _request$body4.email,
-      msg = _request$body4.msg;
+  var _request$body5 = request.body,
+      name = _request$body5.name,
+      email = _request$body5.email,
+      msg = _request$body5.msg;
   pool.query('INSERT INTO Messages (name, email, msg ) VALUES ($1, $2, $3 )', [name, email, msg], function (error, results) {
     if (error) {
       throw error;
@@ -192,6 +208,7 @@ module.exports = {
   getPicturesByType: getPicturesByType,
   createPicture: createPicture,
   deletePicture: deletePicture,
+  updatePicture: updatePicture,
   getNavigation: getNavigation,
   createMessage: createMessage,
   getMessages: getMessages,

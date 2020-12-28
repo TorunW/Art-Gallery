@@ -73,6 +73,10 @@ app.post('/delete', (req, res) => {
   }
 })
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
 app.listen(process.env.PORT || 80, () => {
   console.log('YO YO YO BIACH');
 });

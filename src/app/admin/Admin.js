@@ -248,13 +248,21 @@ function AddItemForm(props) {
 
   let initFormData = props.selectedItem !== null ? props.selectedItem : {};
   const [formData, setFormData] = useState(initFormData)
-  console.log(props)
+  const [errors, setErrors] = useState([])
+  console.log(errors)
 
   function onUpdateFormField(obj) {
     const newFormData = {
     ...formData, ...obj
     }
     setFormData(newFormData)
+  }
+
+  function updateFormErrors(obj) {
+    const newErrors = {
+    ...errors, ...obj
+    }
+    setErrors(newErrors)
   }
 
   function onFormSubmit() {
@@ -314,19 +322,15 @@ function FormField(props) {
   let initData = props.defaultValue !== null ? props.defaultValue : '';
   const [ data, setData ] = useState(initData)
   const [error, setError] = useState({})
-  console.log(error)
-
 
   useEffect (()=>{
     if (data !== initData) {
       const newError = validateField(data)
+      setError(newError)
       if (!newError.msg) {
         let obj = {};
         obj[props.column] = data;
         props.onUpdateFormField(obj)
-      } else {
-        console.log('this is new error before setError' + newError)
-        setError(newError)
       }
     }
   },[data])
@@ -338,7 +342,7 @@ function FormField(props) {
   function validateField(value) {
     let newError = {};
     if (props.column === 'caption') {
-      if (data.length < 3) {
+      if (value.length < 3) {
         newError.msg = 'this is an error'
         newError.column = props.column
       } else newError = {}
@@ -347,8 +351,6 @@ function FormField(props) {
   }
   let errorMessageDisplay;
   if (error.msg && error.column === props.column) {
-    console.log('this is on render')
-    console.log(error)
     errorMessageDisplay = (
       <Message negative>
         <p>

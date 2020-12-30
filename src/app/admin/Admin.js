@@ -313,19 +313,21 @@ function FormField(props) {
   
   let initData = props.defaultValue !== null ? props.defaultValue : '';
   const [ data, setData ] = useState(initData)
-  const [error, setError] = useState('')
+  const [error, setError] = useState({})
   console.log(error)
 
 
   useEffect (()=>{
-    const newError = validateField(data)
-    if (newError === '') {
-      let obj = {};
-      obj[props.column] = data;
-      props.onUpdateFormField(obj)
-    } else {
-      console.log('this is new error before setError' + newError)
-      setError(newError)
+    if (data !== initData) {
+      const newError = validateField(data)
+      if (!newError.msg) {
+        let obj = {};
+        obj[props.column] = data;
+        props.onUpdateFormField(obj)
+      } else {
+        console.log('this is new error before setError' + newError)
+        setError(newError)
+      }
     }
   },[data])
 
@@ -334,20 +336,23 @@ function FormField(props) {
   }
 
   function validateField(value) {
-    let newError = '';
+    let newError = {};
     if (props.column === 'caption') {
-      if (data.length < 3) newError = 'fill'
+      if (data.length < 3) {
+        newError.msg = 'this is an error'
+        newError.column = props.column
+      } else newError = {}
     }
     return newError;
   }
   let errorMessageDisplay;
-  console.log('this is on render')
-  console.log(error, error.length)
-  if (error.length > 0) {
+  if (error.msg && error.column === props.column) {
+    console.log('this is on render')
+    console.log(error)
     errorMessageDisplay = (
       <Message negative>
         <p>
-          {error}
+          {error.msg}
         </p>
       </Message>
     )
@@ -420,6 +425,7 @@ function FormField(props) {
   return(
     <div className="field">
       {formFieldDisplay}
+      {errorMessageDisplay}
     </div>
   )
 }

@@ -227,9 +227,7 @@ function ContactSection(props) {
 }
 
 function postMessage() {
-  console.log(
-    "what"
-  )
+
 
   $.ajax({
     url:'/messages',

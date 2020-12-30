@@ -313,21 +313,36 @@ function FormField(props) {
   
   let initData = props.defaultValue !== null ? props.defaultValue : '';
   const [ data, setData ] = useState(initData)
+  const [error, setError] = useState(null)
+  console.log(error)
+
 
   useEffect (()=>{
-    let obj = {};
-    obj[props.column] = data;
-    props.onUpdateFormField(obj)
+    const newError = validateField(data)
+    if (newError === null) {
+      let obj = {};
+      obj[props.column] = data;
+      props.onUpdateFormField(obj)
+    } else (setError (newError))
   },[data])
 
   function updateInput(value) {
     setData(value)
   }
 
+  function validateField(value) {
+    let newError = null;
+    if (props.column === 'caption') {
+      if (data.lengt > 3) newError = 'fill'
+    }
+    return newError;
+  }
+
   let formFieldDisplay = (
     <React.Fragment>
       <label>Titel</label>
       <input value={data} onChange={e => updateInput(e.target.value)} placeholder={props.column} type="text"/>
+      {error}
     </React.Fragment>
   )
 

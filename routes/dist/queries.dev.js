@@ -3,10 +3,10 @@
 var Pool = require('pg').Pool;
 
 var pool = new Pool({
-  user: 'ngqpvjtudczeqx',
-  host: 'ec2-54-228-209-117.eu-west-1.compute.amazonaws.com',
-  database: 'dfo7krr81q3397',
-  password: '50f756419ad39c5faf2a81ed5c434908a32823015167d2dc263eacf52e6039e7',
+  user: 'postgres',
+  host: 'localhost',
+  database: 'Charlee',
+  password: 'Hallo',
   port: 5432
 });
 /** USERS */

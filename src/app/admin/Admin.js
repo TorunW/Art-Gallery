@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './Admin.css';
 import FileUploader from '../partials/file-uploader';
 import $ from 'jquery';
-import { Button, Header, Icon, Modal } from 'semantic-ui-react';
+import { Button, Header, Icon, Modal, Message } from 'semantic-ui-react';
 
 
 
@@ -323,7 +323,7 @@ function FormField(props) {
       let obj = {};
       obj[props.column] = data;
       props.onUpdateFormField(obj)
-    } else (setError (newError))
+    } else {setError(newError)}
   },[data])
 
   function updateInput(value) {
@@ -333,16 +333,25 @@ function FormField(props) {
   function validateField(value) {
     let newError = null;
     if (props.column === 'caption') {
-      if (data.lengt > 3) newError = 'fill'
+      if (data.length < 3) newError = 'fill'
     }
     return newError;
   }
-
+  let errorMessageDisplay;
+  if (error !== null) {
+    errorMessageDisplay = (
+      <Message negative>
+        <p>
+          {error}
+        </p>
+      </Message>
+    )
+  }
   let formFieldDisplay = (
     <React.Fragment>
       <label>Titel</label>
       <input value={data} onChange={e => updateInput(e.target.value)} placeholder={props.column} type="text"/>
-      {error}
+      {errorMessageDisplay}
     </React.Fragment>
   )
 

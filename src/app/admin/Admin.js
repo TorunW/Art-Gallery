@@ -313,17 +313,20 @@ function FormField(props) {
   
   let initData = props.defaultValue !== null ? props.defaultValue : '';
   const [ data, setData ] = useState(initData)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState('')
   console.log(error)
 
 
   useEffect (()=>{
     const newError = validateField(data)
-    if (newError === null) {
+    if (newError === '') {
       let obj = {};
       obj[props.column] = data;
       props.onUpdateFormField(obj)
-    } else {setError(newError)}
+    } else {
+      console.log('this is new error before setError' + newError)
+      setError(newError)
+    }
   },[data])
 
   function updateInput(value) {
@@ -331,14 +334,16 @@ function FormField(props) {
   }
 
   function validateField(value) {
-    let newError = null;
+    let newError = '';
     if (props.column === 'caption') {
       if (data.length < 3) newError = 'fill'
     }
     return newError;
   }
   let errorMessageDisplay;
-  if (error !== null) {
+  console.log('this is on render')
+  console.log(error, error.length)
+  if (error.length > 0) {
     errorMessageDisplay = (
       <Message negative>
         <p>

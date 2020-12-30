@@ -249,7 +249,6 @@ function AddItemForm(props) {
   let initFormData = props.selectedItem !== null ? props.selectedItem : {};
   const [formData, setFormData] = useState(initFormData)
   const [errors, setErrors] = useState([])
-  console.log(errors)
 
   function onUpdateFormField(obj) {
     const newFormData = {
@@ -260,14 +259,26 @@ function AddItemForm(props) {
 
   function updateFormErrors(obj) {
     let errorIndex = -1;
+    console.log('above errors.forEach')
+    console.log(errors)
     errors.forEach(function(error, index){
       if (error.column === obj.column) {
         errorIndex = index
       }
     })
-    const newErrors = [
-    ...errors, obj
-    ]
+    let newErrors;
+      if (errorIndex > -1) {
+        const newErrors = [
+          ...errors.slice(0, errorIndex -1), obj,
+          ...errors.slice(errorIndex +1, errors.length -1)
+          ]
+      } else {
+        newErrors = [
+          ...errors, obj
+        ]
+      }
+      console.log('above setErrors(newErrors)')
+      console.log(newErrors)
     setErrors(newErrors)
   }
 
@@ -343,6 +354,8 @@ function FormField(props) {
   },[data])
 
   useEffect(()=>{
+    console.log('props.updateFormErrors')
+    console.log(error)
     props.updateFormErrors(error)
   },[error])
 
@@ -356,10 +369,22 @@ function FormField(props) {
       if (value.length < 3) {
         newError.msg = 'this is an error'
         newError.column = props.column
-      } else newError = {}
+      }
+    } else if (props.column === 'description') {
+      if (value.length < 3) {
+        newError.msg = 'this is an error'
+        newError.column = props.column
+      }
+    } else if (props.column === 'price') {
+      var numbers = /^[0-9]+$/;
+      if(!value.match(numbers)) {
+        newError.msg = 'this is an error'
+        newError.column = props.column
+      }
     }
     return newError;
   }
+
   let errorMessageDisplay;
   if (error.msg && error.column === props.column) {
     errorMessageDisplay = (

@@ -259,9 +259,15 @@ function AddItemForm(props) {
   }
 
   function updateFormErrors(obj) {
-    const newErrors = {
-    ...errors, ...obj
-    }
+    let errorIndex = -1;
+    errors.forEach(function(error, index){
+      if (error.column === obj.column) {
+        errorIndex = index
+      }
+    })
+    const newErrors = [
+    ...errors, obj
+    ]
     setErrors(newErrors)
   }
 
@@ -298,6 +304,7 @@ function AddItemForm(props) {
           column={column}
           defaultValue={defaultValue}
           onUpdateFormField={onUpdateFormField}
+          updateFormErrors={updateFormErrors}
         />
       )
     }
@@ -334,6 +341,10 @@ function FormField(props) {
       }
     }
   },[data])
+
+  useEffect(()=>{
+    props.updateFormErrors(error)
+  },[error])
 
   function updateInput(value) {
     setData(value)

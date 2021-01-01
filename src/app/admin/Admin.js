@@ -258,28 +258,26 @@ function AddItemForm(props) {
   }
 
   function updateFormErrors(obj) {
-    let errorIndex = -1;
-    console.log('above errors.forEach')
-    console.log(errors)
-    errors.forEach(function(error, index){
-      if (error.column === obj.column) {
-        errorIndex = index
-      }
-    })
-    let newErrors;
-      if (errorIndex > -1) {
-        const newErrors = [
-          ...errors.slice(0, errorIndex -1), obj,
-          ...errors.slice(errorIndex +1, errors.length -1)
+    if (obj.column) {
+      let errorIndex = -1;
+      errors.forEach(function(error, index){
+        if (error.column === obj.column) {
+          errorIndex = index
+        }
+      })
+      let newErrors;
+        if (errorIndex > -1) {
+          const newErrors = [
+            ...errors.slice(0, errorIndex -1), obj,
+            ...errors.slice(errorIndex +1, errors.length -1)
+            ]
+        } else {
+          newErrors = [
+            ...errors, obj
           ]
-      } else {
-        newErrors = [
-          ...errors, obj
-        ]
-      }
-      console.log('above setErrors(newErrors)')
-      console.log(newErrors)
-    setErrors(newErrors)
+        }
+      setErrors(newErrors)
+    }
   }
 
   function onFormSubmit() {
@@ -353,13 +351,17 @@ function FormField(props) {
     }
   },[data])
 
-  useEffect(()=>{
-    console.log('props.updateFormErrors')
-    console.log(error)
+  /*useEffect(()=>{
     props.updateFormErrors(error)
-  },[error])
+  },[error])*/
 
   function updateInput(value) {
+    console.log('value')
+    console.log(value)
+    console.log('typeof value')
+    console.log(typeof value)
+    console.log('value.length')
+    console.log(value.length)
     setData(value)
   }
 
@@ -367,20 +369,27 @@ function FormField(props) {
     let newError = {};
     if (props.column === 'caption') {
       if (value.length < 3) {
-        newError.msg = 'this is an error'
+        newError.msg = 'Titel  får inte vara tom'
         newError.column = props.column
       }
     } else if (props.column === 'description') {
       if (value.length < 3) {
-        newError.msg = 'this is an error'
+        newError.msg = 'Beskrivning får inte vara tom'
         newError.column = props.column
       }
     } else if (props.column === 'price') {
       var numbers = /^[0-9]+$/;
       if(!value.match(numbers)) {
-        newError.msg = 'this is an error'
+        newError.msg = 'Får inte innehålla bokstäver'
         newError.column = props.column
       }
+    } else if (props.column === 'picture_type') {
+        console.log('ingallery_type')
+        console.log(value.length)
+        if (value === '0') {
+          newError.msg = 'Välj kategori'
+          newError.column = props.column
+        }
     }
     return newError;
   }
@@ -420,7 +429,7 @@ function FormField(props) {
         <React.Fragment>
           <label>Gallery</label>
           <select onChange={e => updateInput(e.target.value)}>
-            <option value="">Gallery</option>
+            <option value="0">Gallery</option>
             <option selected={props.defaultValue === "paintings" ? "selected" : ""} value="paintings">Tavlor</option>
             <option selected={props.defaultValue === "sculptures" ? "selected" : ""} value="sculpture">Skulpturer</option>   
           </select>

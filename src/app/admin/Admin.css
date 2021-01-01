@@ -7,6 +7,13 @@
 #admin table {
   margin-top: 10px;
 }
+#admin .container {
+  width: fit-content;
+}
+#admin .container img {
+  width: 300px !important;
+  height: 300px;
+}
 /* price form arrows */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

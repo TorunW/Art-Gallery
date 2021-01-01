@@ -14,6 +14,7 @@
     "file-system": "^2.2.2",
     "forever": "^3.0.4",
     "jquery": "^3.5.1",
+    "nanogallery2": "^3.0.4",
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
     "react": "^17.0.1",

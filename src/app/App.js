@@ -44,20 +44,26 @@ function App(props) {
 
 function Header(props) {
 
+  const [ showdropMenu, setShowDropMenu ] = useState(false)
   const navItemsDisplay = props.navigation.map((menuItem, index) => {
     return (
       <li key={index}><Link to={menuItem.nav_link}>{menuItem.title}</Link></li>
     )
   })
+
+  let menuDisplay = (
+    <nav>
+      <ul>
+        {navItemsDisplay}
+      </ul>
+    </nav>
+  );
+  if (window.innerWidth < 577) menuDisplay = <i className="bars icon" onClick={()=> setShowDropMenu(true)}></i>
   
   return (
     <header>
       <h1>Charlotte Karlbom</h1>
-      <nav>
-        <ul>
-         {navItemsDisplay}
-        </ul>
-      </nav>
+        {menuDisplay}
     </header>
   )
 }

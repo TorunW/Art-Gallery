@@ -3,12 +3,13 @@
   height: 500px;
   object-fit: contain;
 }
-#file-upload-container .progessBar {
+#file-upload-container .progress-bar {
   height: 20px;
   width: 0%;
-  background-color: #44d4e7;
+  background-color: rgb(39 103 5.17777778%);
   color: white;
   padding: 9px;
+  transition: width 0.7s ease 0s !important;
 }
 #file-upload-container .file-upload {
   box-shadow: 2px 2px 2px 2px #ccc;

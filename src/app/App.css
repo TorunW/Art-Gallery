@@ -73,56 +73,6 @@ section .description p {
   font-size: 16px;
   font-weight: bold;
 }
-/*Paintings gallery*/
-.sub-gallery .container {
-  display: flex;
-  width: 100%;
-  padding: 4% 2%;
-  box-sizing: border-box;
-  height: 90vh;
-}
-.sub-gallery .container .box {
-  flex: 1;
-  overflow: hidden;
-  transition: 0.5s;
-  margin: 0 2%;
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
-  line-height: 0;
-  background-color: #e0e0e0;
-}
-.sub-gallery .container .box:hover {
-  flex: 1 1 50% !important;
-}
-.sub-gallery .container .box:hover > img {
-  width: 100% !important;
-  object-fit: contain !important;
-}
-.sub-gallery .container .box .my-grid {
-  background-color: white;
-  margin: 0px;
-}
-.sub-gallery .container .box > img {
-  width: 200%;
-  height: calc(100% - 12vh);
-  object-fit: cover;
-  transition: 0.5s;
-}
-.sub-gallery .container h2 {
-  margin-top: 0px;
-  margin-bottom: 0px !important;
-  font-size: 18px;
-}
-.sub-gallery .container p {
-  font-size: 16px;
-}
-.sub-gallery .container .four-wide {
-  margin-top: 45px;
-}
-.sub-gallery .container .four-wide span {
-  font-size: 20px;
-  font-weight: bold;
-}
-/*Paintings gallery*/
 #contact {
   width: 500px;
   margin-left: 15px;
@@ -138,4 +88,19 @@ section .description p {
   width: 230px !important;
   position: relative !important;
   text-align: center !important;
+}
+@media (max-width: 576px) {
+  header {
+    padding-right: 40px;
+  }
+  header h1 {
+    padding-left: 25px;
+    text-align: left !important;
+  }
+  header i.bars {
+    position: absolute;
+    right: 16px;
+    top: 27px;
+    font-size: 1.5rem;
+  }
 }

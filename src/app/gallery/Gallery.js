@@ -9,9 +9,8 @@ function GallerySection(props) {
 
     const [ showSlider, setShowSlider ] = useState(false)
     const [ currentImgIndex, setCurrentImgIndex ] = useState(0)
+    const [ isBlurred, setIsBlurred ] = useState(false); 
   
-    console.log(currentImgIndex)
-
     useEffect(() => {
       getPictures()
     },[])
@@ -20,7 +19,6 @@ function GallerySection(props) {
       fetch('/pictures')
       .then(res => res.text())
       .then(res =>{
-        //console.log(JSON.parse(res));
         setPictures(JSON.parse(res));
       })
     }
@@ -54,6 +52,7 @@ function GallerySection(props) {
         />
       )
     }
+
     const options={
       thumbnails:{
         showThumbnails:false
@@ -62,11 +61,27 @@ function GallerySection(props) {
         showDownloadButton: false
       }
     }
+
+    const callbacks = {
+      onSlideChange: object => console.log(object),
+      onLightboxOpened: object => setIsBlurred(true),
+      onLightboxClosed: object => setIsBlurred(false),
+      onCountSlides: object => console.log(object)
+  };
+  
+    let galleryStyle;
+    if (isBlurred){
+      galleryStyle = {
+        filter:"blur(5px)"
+      }
+    }
+
     return(
       <section id="gallery"> 
         <SRLWrapper 
-         options={options}>
-          <div id="gallery-pictures">{galleryDisplay}</div>
+          callbacks={callbacks}
+          options={options}>
+            <div id="gallery-pictures" style={galleryStyle}>{galleryDisplay}</div>
         </SRLWrapper>
       </section>
     )

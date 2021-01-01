@@ -8,9 +8,9 @@
 #gallery #gallery-pictures {
   column-count: 3;
 }
-@media (max-width: 576) {
+@media (max-width: 576px) {
   #gallery #gallery-pictures {
-    column-count: 1;
+    column-count: 1 !important;
   }
 }
 @media (min-width: 576px) and (max-width: 768px) {
@@ -42,7 +42,7 @@
   width: calc(100% - 16px);
   margin: 8px;
 }
-/* Ain't sure bout dis*/
+/*slideshow*/
 #overlay {
   background-color: rgba(0, 0, 0, 0.3);
   position: fixed;

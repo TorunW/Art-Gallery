@@ -1,0 +1,51 @@
+.sub-gallery .container {
+  max-width: 100% !important;
+  margin-bottom: 100px;
+  float: left;
+  width: 100%;
+  height: calc(100% + 100px);
+}
+.sub-gallery .container .box {
+  width: 50%;
+  float: left;
+  position: relative;
+}
+.sub-gallery .container .box:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+.sub-gallery .container .box .inner-box {
+  background-color: yellow;
+  top: calc((100% - 90%) / 2);
+  position: absolute;
+  width: 90%;
+  left: calc((100% - 90%) / 2);
+  overflow: hidden;
+  border-radius: 10px;
+  height: calc(90% + 100px);
+}
+.sub-gallery .container .box .inner-box img {
+  position: absolute;
+  cursor: pointer;
+}
+.sub-gallery .container .box .inner-box img.loaded {
+  transition: 0.5s;
+  opacity: 1;
+}
+.sub-gallery .container .box .inner-box img.loaded:hover {
+  transition: 1s;
+}
+.sub-gallery .container .box .inner-box .info-container {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: yellow;
+}
+@media (max-width: 576px) {
+  .sub-gallery .container .box {
+    width: 100%;
+  }
+}

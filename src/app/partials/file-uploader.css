@@ -21,6 +21,9 @@
   border-style: dotted;
   cursor: pointer;
 }
+#file-upload-container .file-upload #inner-drop-zone p:hover .with-img {
+  opacity: 1;
+}
 #file-upload-container .file-upload #inner-drop-zone p .inner-inner-drop-zone {
   margin: 0 auto;
   position: absolute;

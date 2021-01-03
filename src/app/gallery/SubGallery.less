@@ -1,7 +1,7 @@
 
 .sub-gallery {
 
-    @infoHeight:100px;
+    @infoHeight: 75px;
     @childWidth:90%;
 
     .container {
@@ -23,7 +23,7 @@
             }
 
             .inner-box {
-                background-color: yellow;
+                background-color: whitesmoke;
                 top: calc((100% - @childWidth) / 2); 
                 position: absolute;
                 width: @childWidth;
@@ -31,6 +31,7 @@
                 overflow: hidden;
                 border-radius: 10px;
                 height: calc(@childWidth + @infoHeight);
+                box-shadow: rgb(99, 99, 99, 1.5%) 0px 1px 2px 0px;
 
                 img {
                     position: absolute;
@@ -52,7 +53,33 @@
                     position: absolute;
                     left: 0;
                     bottom: 0;
-                    background-color: yellow;
+                    background-color: whitesmoke;
+
+                    .left-container {
+                        padding-left: 10px;
+                        width: 80%;
+                        float: left;
+                        padding-top: 5px;
+
+                        h2 {
+                            float: left;
+                            width: 100%;
+                        }
+                        p {
+                            float: left;
+                        }
+
+                    }
+
+                    .right-container {
+                        font-weight: bold;
+                        font-size: 20px;
+                        float: left;
+                        width: 20%;
+                        text-align: right;
+                        padding-right: 10px;
+                        padding-top: 49px;                
+                        }
                     
                 }
             }

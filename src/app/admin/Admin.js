@@ -417,11 +417,13 @@ function FormField(props) {
       if (props.defaultValue === null) {
         formFieldDisplay = (
           <div id="form-img-container">
-            <FileUploader updateInput={updateInput}/>
+            <div className="inner-img-container">
+              <FileUploader updateInput={updateInput}/>
+            </div>
           </div>
         )
       } else {
-        formFieldDisplay = <div id="form-img-container"><img src={props.defaultValue}/></div>
+        formFieldDisplay = <div id="form-img-container"><div className="inner-img-container"><img src={props.defaultValue}/></div></div>
       }
     break;  
     case 'picture_type':

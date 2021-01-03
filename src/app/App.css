@@ -92,6 +92,7 @@ section .description p {
 @media (max-width: 576px) {
   header {
     padding-right: 40px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
   }
   header h1 {
     padding-left: 25px;
@@ -102,5 +103,26 @@ section .description p {
     right: 16px;
     top: 27px;
     font-size: 1.5rem;
+  }
+  header .drop-menu-container {
+    position: absolute;
+    top: 100%;
+    right: 0px;
+    width: 161px;
+    background: whitesmoke;
+    padding: 10px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  header .drop-menu-container ul {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+  }
+  header .drop-menu-container ul li {
+    margin-bottom: 15px;
+  }
+  header .drop-menu-container ul li a {
+    color: black;
+    font-size: 20px;
   }
 }

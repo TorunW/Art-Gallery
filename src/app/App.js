@@ -45,6 +45,7 @@ function App(props) {
 function Header(props) {
 
   const [ showdropMenu, setShowDropMenu ] = useState(false)
+
   const navItemsDisplay = props.navigation.map((menuItem, index) => {
     return (
       <li key={index}><Link to={menuItem.nav_link}>{menuItem.title}</Link></li>
@@ -58,12 +59,23 @@ function Header(props) {
       </ul>
     </nav>
   );
-  if (window.innerWidth < 577) menuDisplay = <i className="bars icon" onClick={()=> setShowDropMenu(true)}></i>
+  if (window.innerWidth < 577) menuDisplay = <i className="bars icon" onClick={()=> setShowDropMenu(showdropMenu === true ? false : true)}></i>
   
+  let dropMenuDisplay;
+  if (showdropMenu === true) {
+    dropMenuDisplay = (
+      <div className="drop-menu-container">
+        <ul>
+          {navItemsDisplay}
+        </ul>
+      </div>
+    )
+  }
   return (
     <header>
       <h1>Charlotte Karlbom</h1>
         {menuDisplay}
+        {dropMenuDisplay}
     </header>
   )
 }

@@ -61,6 +61,14 @@ function FileUpload(props) {
     return (
         <div id="file-upload-container">
             <div className="file-upload">
+                <input type="file" ref={el} onChange={handleChange} accept='image/*' />
+                <div className="ui progress bar progress-bar" style={{ width: progress }}></div>
+                <button onClick={uploadFile} className="ui blue button upbutton">
+                    Upload
+                </button>
+            <hr />
+            {/* displaying received image*/}
+            {data.path && <img src={data.path} alt={data.name} />}
             <Dropzone onDrop={acceptedFiles => handleDropUploader(acceptedFiles)}>
                 {({getRootProps, getInputProps}) => (
                     <div id="inner-drop-zone" {...getRootProps()}>
@@ -86,9 +94,6 @@ function FileUpload(props) {
         </div>
     );
 }
-
-
-
 
 export default FileUpload;
 

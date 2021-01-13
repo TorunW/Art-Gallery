@@ -42,6 +42,12 @@ app.get('/navigation', db.getNavigation)
 
 app.post('/messages', db.createMessage)
 app.get('/messages', db.getMessages)
+app.get('/countreadmsg', db.countReadMsg)
+app.put('/messages/:id', db.updateMessages)
+app.delete('/messages/:id', db.deleteMessage)
+
+app.get('/about', db.getAbout)
+app.put('/about', db.updateAbout)
 
 app.get('/tables', db.getTableNames)
 
@@ -55,7 +61,6 @@ app.post('/upload', (req, res) => {
   //  mv() method places the file inside public directory
   myFile.mv(`${__dirname}/uploads/pictures/${myFile.name}`, function (err) {
       if (err) {
-          console.log(err)
           return res.status(500).send({ msg: "Error occured" });
       }
       // returing the response with file path and name

@@ -40,6 +40,11 @@ app.put('/pictures/:id', db.updatePicture);
 app.get('/navigation', db.getNavigation);
 app.post('/messages', db.createMessage);
 app.get('/messages', db.getMessages);
+app.get('/countreadmsg', db.countReadMsg);
+app.put('/messages/:id', db.updateMessages);
+app["delete"]('/messages/:id', db.deleteMessage);
+app.get('/about', db.getAbout);
+app.put('/about', db.updateAbout);
 app.get('/tables', db.getTableNames); // file upload api
 
 app.post('/upload', function (req, res) {
@@ -54,7 +59,6 @@ app.post('/upload', function (req, res) {
 
   myFile.mv("".concat(__dirname, "/uploads/pictures/").concat(myFile.name), function (err) {
     if (err) {
-      console.log(err);
       return res.status(500).send({
         msg: "Error occured"
       });

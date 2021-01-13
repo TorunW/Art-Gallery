@@ -22,7 +22,6 @@ function App(props) {
     fetch('/navigation')
     .then(res => res.text())
     .then(res =>{
-      console.log(JSON.parse(res));
       setNavigation(JSON.parse(res));
     })
   }
@@ -59,8 +58,10 @@ function Header(props) {
       </ul>
     </nav>
   );
-  if (window.innerWidth < 577) menuDisplay = <i className="bars icon" onClick={()=> setShowDropMenu(showdropMenu === true ? false : true)}></i>
-  
+  if (window.innerWidth < 577) {
+    menuDisplay = <i className={(showdropMenu === true ? 'close' : 'bars') +  " icon"} onClick={()=> setShowDropMenu(showdropMenu === true ? false : true)}></i>
+  } 
+
   let dropMenuDisplay;
   if (showdropMenu === true) {
     dropMenuDisplay = (
@@ -163,28 +164,67 @@ function SculpturesSection(props) {
 
 function AboutSection(props) {
 
+  const [aboutData, setAboutData] = useState('')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getAbout()
+  },[])
+
+  function getAbout() {
+    fetch('/about')
+    .then(res => res.text())
+    .then(res =>{
+      setAboutData(JSON.parse(res)[0]);
+      setLoading(false)
+    })
+  }
+
+  let imgDisplay = (
+  <div class="ui placeholder">
+    <div class="image"></div>
+  </div>
+  )
+
+  let textDisplay = (
+    <div class="ui placeholder">
+      <div class="paragraph">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+      <div class="paragraph">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  )
+  if (loading === false) {
+    imgDisplay = <img src={aboutData.profile_img}/>
+    textDisplay = <div dangerouslySetInnerHTML={{__html:aboutData.about_text}}></div>
+  }
 
   return (
    <section id="about">
-     <div className="title"><h1>Om mig</h1></div>
-
-     <div class="row">
-       <div class="col-4">
-        <div className="profile-img-container"><img src="img/pictures/profile.jpg"/></div>
-       </div>
-       <div class="col-8">
-        <div className="description">
-          <p>Jag var verksam som sjukgymnast under drygt 15 ar, men har nu lämnat varden för att kunna fokusera pa konsten.<br/> 
-            Jag har alltid varit intresserad av konst och konsthantverk, 
-            arbetade tidigare mest med lera men för dryga 10 ar sedan upptäckte jag 
-            glädjen och fascinationen i att uttrycka mig genom maleriet.<br/> Jag är i huvudsak autodidakt, 
-            har gatt diverse kvälls- och dagkurser. Jag malar figurativt i olja
-            och arbetar även med collage i tidningspaper.</p>
+     <div className="title">
+       <h1>Om mig</h1>
+      </div>
+     <div className="row">
+        <div className="col-4">
+          <div className="profile-img-container">
+            {imgDisplay}
+          </div>
+        </div>
+        <div className="col-8">
+          <div className="description">
+            {textDisplay}
           </div>
         </div>
       </div>
    </section>
-
   )
 }
 
@@ -276,7 +316,7 @@ function postMessage() {
       <input type="email" value={email} className="form-control" placeholder="Enter email" onChange={(e) => onEmailChange(e)}/>
       {emailErrorDisplay}
     </div>
-    <div class="form-group">
+    <div className="form-group">
       <label>Your message</label>
       <textarea className="form-control" rows="5" onChange={(e) => onMessageChange(e)}>{message}</textarea>
     </div>
@@ -284,7 +324,7 @@ function postMessage() {
   </form>
   )
 
-  if (isSubmitted === true) formDisplay=<p>Form submitted!</p>
+  if (isSubmitted === true) formDisplay=<p>Tack för ditt meddelande!</p>
 
   return(
     <section id="contact">

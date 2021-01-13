@@ -1,22 +1,46 @@
 import React, {useState, useEffect} from 'react';
 import './Admin.css';
-import FileUploader from '../partials/file-uploader';
+import DBTableRender from './DbTableRender';
 import $ from 'jquery';
-import { Button, Header, Icon, Modal, Message } from 'semantic-ui-react';
-
-
+import { Icon, Label, Menu } from 'semantic-ui-react';
 
 function Admin(props) {
 
-  const [dbTables, setDbTables] = useState(['pictures', 'messages']);
+  const [dbTables, setDbTables] = useState(['pictures', 'messages', 'about']);
   const [currentSection, setCurrentSection] = useState('admin');
+  const [msgCounter, setMsgCounter] = useState(0)
 
+  useEffect(()=> {
+    countMsg()
+  },[])
+
+  function countMsg() {
+    $.ajax({
+      url:'http://localhost:80/countreadmsg',
+      type:'GET'
+    }).done(function(res) {
+      console.log(res)
+      setMsgCounter(res[0].count);
+    })
+  }
 
   const navItemsDisplay = dbTables.map((table, index) => {
     let menuItemclassName = 'item';
     if (currentSection === table) menuItemclassName += ' active';
+    let msgCounterDisplay;
+    if (table === 'messages' && msgCounter !== 0) {
+      msgCounterDisplay = (
+        <Label color='red' floating>
+          {msgCounter}
+        </Label>
+      )
+    }
     return (
-      <a className={menuItemclassName} onClick={() => setCurrentSection(table)}>{table}</a>
+      <Menu.Item as="a" className={menuItemclassName} onClick={() => setCurrentSection(table)}>
+        <Icon name={table === 'pictures' ? 'picture' : table === 'messages' ? 'mail' : 'user'}/>
+        {table}
+        {msgCounterDisplay}
+      </Menu.Item>
     )
   })
 
@@ -36,447 +60,39 @@ function Admin(props) {
 
   return(
     <section id="admin">
-      <nav>
-        <div className="ui secondary pointing menu">
-          <a className={mainMenuItemclassNameName} onClick={() => setCurrentSection("admin")}>Admin main</a>
+      <Menu compact>
+          <Menu.Item as='a' className={mainMenuItemclassNameName} onClick={() => setCurrentSection("admin")}>
+            Admin main
+
+          </Menu.Item>
           {navItemsDisplay}
-        </div>
-      </nav>
+      </Menu>
       {contentDisplay}
     </section>
   )
 }
 
-function DBTableRender(props) {
-
-    const [items, setItems] = useState([])
-    const [columns, setColumns] = useState([])
-    const [showForm, setShowForm] = useState(false)
-    const [loading, setLoading] = useState(true)
-    const [selectedItem, setSelectedItem] = useState(null)
-
-    useEffect(() => {
-        getItems()
-    },[])
-
-    useEffect(() => {
-      if (selectedItem !== null) setShowForm(true)
-  },[selectedItem])
-
-
-    function getItems()  {
-        setLoading(true)
-        fetch(props.fetchUrl)
-        .then(res => res.text())
-        .then(res =>{
-          const newItems = JSON.parse(res);
-          let columnArray = []
-          for (var i in newItems[0]){
-            columnArray.push(i)
-          }
-          setColumns(columnArray)
-          setItems(JSON.parse(res));
-          window.scrollTo({top:0,behavior:'smooth'})
-          setLoading(false)
-        })
-    }
-
-    function deleteItem(item) {
-
-      setLoading(true)
-      $.ajax({
-        url:'/delete',
-        type:'POST',
-        data:{path:item.filename}
-      }).done(function(res){
-        console.log(res)
-        $.ajax({
-          url:'http://localhost:80/pictures/' + item.picture_id,
-          type:'DELETE'
-        }).done(function(res) {
-          console.log(res)
-          getItems();
-        })
-      })
-    }
-
-    function onFinishFormSubmit() {
-      setShowForm(false)
-      getItems()
-    }
- 
-    const columnsDisplay = columns.map((column, index) => (
-        <th key={index} scope="col">
-            {column}
-        </th>
-    ))
-
-    const itemsDisplay = items.map((item, index) => (
-      <tr key={index}>
-        {
-          columns.map((column, index) => {
-
-            let cellDisplay = item[column];
-            if (column === 'filename') {
-                cellDisplay =(
-                  <img src={item[column]} width="50px" height="50px"/>
-                )
-            }
-            return(
-                <td key={index}>
-                  {cellDisplay}
-                </td>
-              )
-          })
-        }
-        <td>
-          <TableRowUserMenu
-            item={item}
-            deleteItem={deleteItem}
-            setSelectedItem={setSelectedItem}
-          />
-        </td>
-      </tr>
-    ))
-
-    let tableDisplay, formDisplay;
-    if (showForm === false) {
-      let addButtonDisplay;
-      if (props.fetchUrl === '/pictures') {
-        addButtonDisplay = (
-          <a onClick={() => setShowForm(true)}className="ui green basic button">
-            <i className="plus icon"></i>
-            Lägg till bild
-          </a>
-        )
-      }
-
-      let loadingDisplay;
-      if (loading === true) {
-        loadingDisplay = (
-          <div class="ui active inverted dimmer">
-            <div class="ui text loader"><b>loading...</b></div>
-          </div>
-      )
-      }
-
-      tableDisplay = (
-        <React.Fragment>
-          {addButtonDisplay}
-          <div className="dimmable">
-            {loadingDisplay}
-            <table className="ui celled table">
-            <thead>
-                <tr>
-                {columnsDisplay}
-                <th>update</th>
-                </tr>
-            </thead>
-            <tbody>
-            {itemsDisplay}
-            </tbody>
-            </table>
-          </div>
-        </React.Fragment>
-      )
-    } else {
-      console.log("selected item on parent")
-      console.log(selectedItem);
-      formDisplay = (
-        <AddItemForm
-          columns={columns}
-          selectedItem={selectedItem}
-          onFinishFormSubmit={onFinishFormSubmit}
-        />
-      )
-    }
-
-    return(
-      <div className="admin-table-container">
-        {tableDisplay}
-        {formDisplay}
-      </div>
-    )
-}
-
-function TableRowUserMenu(props) {
-
-  const [open, setOpen] = React.useState(false)
-
-  function onApprovedDeleteClick() {
-    setOpen(false)
-
-    props.deleteItem(props.item)
-  }
-  
-  return(
-    <div className="table-row-user-menu">
-      <button className="ui icon blue button" onClick={()=> props.setSelectedItem(props.item)}>
-        <i className="pencil alternate icon"></i>
-      </button>
-        <Modal
-          basic
-          onClose={() => setOpen(false)}
-          onOpen={() => setOpen(true)}
-          open={open}
-          size='tiny'
-          trigger={<Button icon color='red'><Icon name='trash' /></Button>}
-        >
-          <Header icon>
-            <Icon name='trash alternate outline' />
-              Ta bort bild
-            </Header>
-          <Modal.Content>
-            <p>
-              Vill du radera den här bilden?
-            </p>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button basic color='red' inverted onClick={() => setOpen(false)}>
-              <Icon name='remove' /> Nej
-            </Button>
-            <Button color='green' inverted onClick={() => onApprovedDeleteClick()}>
-              <Icon name='checkmark' /> Ja
-            </Button>
-          </Modal.Actions>
-        </Modal>
-        </div>
-  )
-}
-
-function AddItemForm(props) {
-
-  let initFormData = props.selectedItem !== null ? props.selectedItem : {};
-  const [formData, setFormData] = useState(initFormData)
-  const [errors, setErrors] = useState([])
-
-  function onUpdateFormField(obj) {
-    const newFormData = {
-    ...formData, ...obj
-    }
-    setFormData(newFormData)
-  }
-
-  function updateFormErrors(obj) {
-    if (obj.column) {
-      let errorIndex = -1;
-      errors.forEach(function(error, index){
-        if (error.column === obj.column) {
-          errorIndex = index
-        }
-      })
-      let newErrors;
-        if (errorIndex > -1) {
-          const newErrors = [
-            ...errors.slice(0, errorIndex -1), obj,
-            ...errors.slice(errorIndex +1, errors.length -1)
-            ]
-        } else {
-          newErrors = [
-            ...errors, obj
-          ]
-        }
-      setErrors(newErrors)
-    }
-  }
-
-  function onFormSubmit() {
-    console.log(formData);
-    let ajaxUrl = '/pictures';
-    let ajaxType = 'POST';
-    if (props.selectedItem !== null) {
-      console.log("hello what why?");
-      ajaxUrl += '/' + formData.picture_id;
-      ajaxType = 'PUT'
-    }
-
-    $.ajax({
-      url:ajaxUrl,
-      type:ajaxType,
-      data: formData
-    }).done(function(res) {
-      console.log(res)
-      props.onFinishFormSubmit()
-    })
-  }
-
-  const formFieldsDisplay = props.columns.map ((column, index) => {
-    
-    let showFormField = true;
-    if (column === 'created_at' || column.indexOf('_id') > -1 ) showFormField = false;
-    if (showFormField === true) {
-      let defaultValue = null;
-      if (props.selectedItem !== null) defaultValue = props.selectedItem[column]
-      return(
-        <FormField 
-          key={index}
-          column={column}
-          defaultValue={defaultValue}
-          onUpdateFormField={onUpdateFormField}
-          updateFormErrors={updateFormErrors}
-        />
-      )
-    }
-   
-  })
-
-
-  return(
-    <div className="add-item-form">
-      <div className="ui form">
-        {formFieldsDisplay}
-        <button className="ui button" onClick={onFormSubmit}>
-          {props.selectedItem !== null ? "Uppdatera bild" : "Lägg till Bild"}
-        </button>
-      </div>
-    </div>
-  )
-}
-
-function FormField(props) {
-  
-  let initData = props.defaultValue !== null ? props.defaultValue : '';
-  const [ data, setData ] = useState(initData)
-  const [error, setError] = useState({})
-
-  useEffect (()=>{
-    if (data !== initData) {
-      const newError = validateField(data)
-      setError(newError)
-      if (!newError.msg) {
-        let obj = {};
-        obj[props.column] = data;
-        props.onUpdateFormField(obj)
-      }
-    }
-  },[data])
-
-  /*useEffect(()=>{
-    props.updateFormErrors(error)
-  },[error])*/
-
-  function updateInput(value) {
-    console.log('value')
-    console.log(value)
-    console.log('typeof value')
-    console.log(typeof value)
-    console.log('value.length')
-    console.log(value.length)
-    setData(value)
-  }
-
-  function validateField(value) {
-    let newError = {};
-    if (props.column === 'caption') {
-      if (value.length < 3) {
-        newError.msg = 'Titel  får inte vara tom'
-        newError.column = props.column
-      }
-    } else if (props.column === 'description') {
-      if (value.length < 3) {
-        newError.msg = 'Beskrivning får inte vara tom'
-        newError.column = props.column
-      }
-    } else if (props.column === 'price') {
-      var numbers = /^[0-9]+$/;
-      if(!value.match(numbers)) {
-        newError.msg = 'Får inte innehålla bokstäver'
-        newError.column = props.column
-      }
-    } else if (props.column === 'picture_type') {
-        console.log('ingallery_type')
-        console.log(value.length)
-        if (value === '0') {
-          newError.msg = 'Välj kategori'
-          newError.column = props.column
-        }
-    }
-    return newError;
-  }
-
-  let errorMessageDisplay;
-  if (error.msg && error.column === props.column) {
-    errorMessageDisplay = (
-      <Message negative>
-        <p>
-          {error.msg}
-        </p>
-      </Message>
-    )
-  }
-  let formFieldDisplay = (
-    <React.Fragment>
-      <label>Titel</label>
-      <input value={data} onChange={e => updateInput(e.target.value)} placeholder={props.column} type="text"/>
-      {errorMessageDisplay}
-    </React.Fragment>
-  )
-
-  switch (props.column) {
-    case 'filename': 
-      if (props.defaultValue === null) {
-        formFieldDisplay = (
-          <div id="form-img-container">
-            <div className="inner-img-container">
-              <FileUploader updateInput={updateInput}/>
-            </div>
-          </div>
-        )
-      } else {
-        formFieldDisplay = <div id="form-img-container"><div className="inner-img-container"><img src={props.defaultValue}/></div></div>
-      }
-    break;  
-    case 'picture_type':
-      formFieldDisplay = (
-        <React.Fragment>
-          <label>Gallery</label>
-          <select onChange={e => updateInput(e.target.value)}>
-            <option value="0">Gallery</option>
-            <option selected={props.defaultValue === "paintings" ? "selected" : ""} value="paintings">Tavlor</option>
-            <option selected={props.defaultValue === "sculptures" ? "selected" : ""} value="sculpture">Skulpturer</option>   
-          </select>
-        </React.Fragment>
-      )
-    break;
-    case 'description':
-      formFieldDisplay = (
-        <React.Fragment>
-          <label>Beskrivning</label>
-          <textarea onChange={e => updateInput(e.target.value)} rows="2">
-            {data}
-          </textarea>
-        </React.Fragment>
-      )
-      break;
-    case 'price':
-      formFieldDisplay = (
-        <React.Fragment>
-          <label>Pris</label>
-          <div className="ui right labeled input">
-            <input value={data} onChange={e => updateInput(e.target.value)} type="text"/>
-            <div className="ui basic label">
-              kr
-            </div>
-          </div>
-        </React.Fragment>
-      )
-    break;
-    default:
-    formFieldDisplay = (
-      <React.Fragment>
-        <label>Titel</label>
-        <input value={data} onChange={e => updateInput(e.target.value)} placeholder={props.column} type="text"/>
-      </React.Fragment>
-    )
-    break;
-  }
-
-  return(
-    <div className="field">
-      {formFieldDisplay}
-      {errorMessageDisplay}
-    </div>
-  )
-}
-
 export default Admin;
+
+
+
+/* if (obj.column) {
+  let errorIndex = -1;
+  errors.forEach(function(error, index){
+    if (error.column === obj.column) {
+      errorIndex = index
+    }
+  })
+  let newErrors;
+    if (errorIndex > -1) {
+      const newErrors = [
+        ...errors.slice(0, errorIndex -1), obj,
+        ...errors.slice(errorIndex +1, errors.length -1)
+        ]
+    } else {
+      newErrors = [
+        ...errors, obj
+      ]
+    }
+  setErrors(newErrors)
+} */

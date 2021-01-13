@@ -1,64 +1,41 @@
 #file-upload-container {
   height: 100%;
   width: 100%;
+  background-color: white;
 }
-#file-upload-container .file-upload {
-  height: 100%;
-  width: 100%;
-}
-#file-upload-container .file-upload .progress-bar {
+#file-upload-container .progress-bar {
   transition: width 1.5s ease 1.5s !important;
 }
-#file-upload-container .file-upload #inner-drop-zone {
-  height: 100%;
+#file-upload-container #inner-drop-zone {
+  height: 332px;
   width: 100%;
   text-align: center;
   margin-bottom: 15px;
+  position: relative;
+  background-color: #e3e3e3;
+  border-radius: 0.28571429rem;
 }
-#file-upload-container .file-upload #inner-drop-zone p {
+#file-upload-container #inner-drop-zone input[type=file] {
+  outline: none !important;
+}
+#file-upload-container #inner-drop-zone input[type=file]:active {
+  outline: none !important;
+}
+#file-upload-container #inner-drop-zone .instruction-container {
   width: 100%;
-  height: 100%;
-  border-style: dotted;
   cursor: pointer;
-}
-#file-upload-container .file-upload #inner-drop-zone p:hover .with-img {
-  opacity: 1;
-  z-index: 1;
-}
-#file-upload-container .file-upload #inner-drop-zone p .inner-inner-drop-zone {
-  margin: 0 auto;
   position: absolute;
-  top: 30% !important;
-  left: 15% !important;
+  top: calc(50% - 55px);
+  padding: 0 5%;
 }
-#file-upload-container .file-upload #inner-drop-zone p .inner-inner-drop-zone.with-img {
-  opacity: 0;
-  z-index: 1000;
+#file-upload-container #inner-drop-zone .instruction-container i {
+  font-size: 4em;
 }
-#file-upload-container .file-upload #inner-drop-zone p .inner-inner-drop-zone i {
-  font-size: 6rem;
-  position: relative;
-}
-#file-upload-container .file-upload #inner-drop-zone p .inner-inner-drop-zone span {
-  position: relative;
-}
-#file-upload-container .file-upload #inner-drop-zone p .inner-inner-drop-zone.with-img {
-  opacity: 0;
-}
-#file-upload-container .file-upload #inner-drop-zone p .inner-inner-drop-zone.with-img:hover {
-  opacity: 1;
-}
-#file-upload-container .file-upload #inner-drop-zone p .uploaded-img {
-  width: 100%;
+#file-upload-container #inner-drop-zone .uploaded-img {
   height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
+  width: 100%;
 }
-#file-upload-container .file-upload #inner-drop-zone p .uploaded-img img {
-  margin: 29px auto;
-  max-width: 82%;
-  max-height: 85%;
-  z-index: 0;
+#file-upload-container #inner-drop-zone .uploaded-img img {
+  max-height: 100%;
+  max-width: 100%;
 }

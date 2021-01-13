@@ -78,7 +78,6 @@ const getPictures = (request, response) => {
 
 const getPicturesByType = (request, response) => {
   const picture_type = request.params.picture_type
-  console.log(picture_type)
   pool.query('SELECT * FROM pictures WHERE picture_type = $1 ORDER BY picture_id DESC', [picture_type], (error, results) => {
     if (error) {
       throw error
@@ -148,14 +147,75 @@ const createMessage = (request, response) => {
 }
 
 const getMessages = (request, response) => {
-  pool.query('SELECT * FROM messages ORDER BY msg_id ASC', (error, results) => {
+  pool.query('SELECT * FROM messages ORDER BY msg_id DESC', (error, results) => {
     if (error) {
       throw error
     }
     response.status(200).json(results.rows)
   })
 }
+
+const countReadMsg = (request, response) => {
+  pool.query('SELECT COUNT(*) FROM messages WHERE read IS NOT true', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const updateMessages = (request, response) => {
+  const id = parseInt(request.params.id)
+  const { read } = request.body
+  pool.query(
+    `UPDATE messages SET read = $1 WHERE msg_id = ${id}`,
+    [read],
+    (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send(`Modified with ID: ${id}`)
+    }
+  )
+}
+
+const deleteMessage = (request, response) => {
+  const id = parseInt(request.params.id)
+  pool.query('DELETE FROM messages WHERE msg_id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).send(`Message deleted with ID: ${id}`)
+  })
+}
 /**MESSAGE */
+
+/**ABOUT */
+const getAbout = (request, response) => {
+  pool.query('SELECT * FROM about', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  }) 
+}
+
+
+const updateAbout = (request, response) => {
+  const id = parseInt(request.params.id)
+  const { about_text, profile_img, about_id } = request.body
+  pool.query(
+    'UPDATE about SET about_text = $1, profile_img = $2 WHERE about_id = 1',
+    [about_text, profile_img],
+    (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send(`Modified with ID: ${id}`)
+    }
+  )
+}
+/**ABOUt */
 
 /**ALL TABLES */
 const getTableNames = (request, response) => {
@@ -185,6 +245,12 @@ module.exports = {
 
     createMessage,
     getMessages,
+    countReadMsg,
+    updateMessages,
+    deleteMessage,
+
+    getAbout,
+    updateAbout,
     
     getTableNames
 }

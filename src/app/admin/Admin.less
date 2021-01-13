@@ -1,81 +1,178 @@
-#admin {
-    padding: 0 15px;
+body {
+  background: whitesmoke;
 
-    .admin-table-container {
+  #admin {
+      padding: 0 15px;
+
+      .menu {
+        margin-top: 15px;
+      }
+
+      .admin-table-container {
+          margin-top: 10px;
+
+          .form-header {
+
+            button {
+              margin-right: 15px;
+              float: left;
+            }
+
+            h1 {
+              text-transform: capitalize;
+            }
+          }
+
+          .img-thumbnail {
+            width: 100%;
+            height: 100px;
+            text-align: center;
+
+            img {
+              max-width: 70%;
+              max-height: 100%;
+              margin: 0 auto;
+            }
+          }
+
+          .table-header {
+            float: left;
+            width: 100%;
+
+              h1 {
+                float:left;
+                text-transform: capitalize;
+                margin-top: 0;
+              }
+
+              .add-img-button {
+                float: right;
+              }
+          }
+
+          .dimmable {
+            float: left;
+            width: 100%;
+            .table{ 
+              table-layout: fixed;
+              tbody {
+                tr {
+                  td {
+                    vertical-align: middle;
+                    word-break: break-all;
+                  }
+                }
+              }
+            }
+          }
+
+          .messages {
+            tr {
+              font-weight: bold;
+              background-color: white;
+              &.read {
+                font-weight: normal;
+                box-shadow: none;
+                background-color: gainsboro;
+              }
+
+              button {
+                max-height: 36px;
+                max-width: 38.52px;
+                .envelope {
+                  text-align: justify;
+                  font-size: large;
+                }
+              }
+            }
+          }
+      }
+
+      table {
         margin-top: 10px;
-    }
-
-    table {
-      margin-top: 10px;
-    }
-
-    
-    .container {
-      width: fit-content;
-      img {
-        width: 300px !important;
-        height: 300px;
-      }
-    }
-}
-
-/* price form arrows */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-
-input[type=number] {
-  -moz-appearance: textfield;
-}
-/* price form arrows */
-
-.add-item-form {
-  box-shadow:rgba(99, 99, 99, 0.4) 0px 2px 8px 0px;
-  padding-bottom: 40px;
-
-  .form {
-    padding-left: 50%;
-    padding-top: 10px;
-    padding-right: 70px;
-
-    .field {
-
-      input, select, textarea {
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
       }
 
-      #form-img-container {
-        position: absolute;
-        width: 50%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        text-align: center;
-        padding: 24px 40px;
+      
+      .container {
+        width: fit-content;
+        img {
+          width: 300px !important;
+          height: 300px;
+        }
+      }
+  }
 
-        .inner-img-container {
-          text-align: center;
-          max-width: 100%;
+  /* price form arrows */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+  /* price form arrows */
+
+  .add-item-form {
+    box-shadow:rgba(99, 99, 99, 0.4) 0px 2px 8px 0px;
+    padding-bottom: 40px;
+    height: 404px;
+    margin-top: 15px;
+
+    &.missing-file {
+      
+      #inner-drop-zone{
+        background-color: #fff6f6 !important;
+        color: #9f3a38;
+        box-shadow: 0 0 0 1px #e0b4b4 inset, 0 0 0 0 transparent;
+        background: #f8f8f9;
+        border-radius: .28571429rem;
+        transition: 1s;
+      }
+    }
+
+    .form {
+      padding-left: 50%;
+      padding-top: 10px;
+      padding-right: 70px;
+
+      .field {
+
+        input, select, textarea {
+          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+        }
+
+        #form-img-container {
+          position: absolute;
+          width: 50%;
           height: 100%;
-          background-color: yellow;
-          border-style: solid;
-          border-width: thin;
+          left: 0;
+          top: 0;
+          text-align: center;
+          padding: 24px 40px;
 
-          img {
+          .inner-img-container {
+            text-align: center;
             max-width: 100%;
-            max-height: 100%;
+            height: 100%;
+            background-color: rgb(227, 227, 227);
+            border-radius: .28571429rem;
+
+            img {
+              max-width: 100%;
+              max-height: 100%;
+            }
           }
         }
       }
-    }
 
-    .button {
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      .button {
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
+      }
     }
   }
 }

@@ -16,7 +16,6 @@ function SubGallery(props) {
     },[])
 
     useEffect(() => {
-      console.log(windowSize)
       handelPictures(pictures)
     },[windowSize])
 
@@ -114,7 +113,7 @@ function SubGallery(props) {
     const [imgHeight, setImgHeight] = useState(null)
     const [imgTop, setImgTop] = useState(null)
     const [imgLeft, setImgLeft] = useState(null)
-    const [isHoovered, setIsHoovered] = useState(false)
+    const [isHovered, setIsHovered] = useState(false)
     const [differential, setDifferential] = useState(null)
     const [isResized, setIsResized] = useState(false)
 
@@ -143,7 +142,6 @@ function SubGallery(props) {
 
     function resizedw(){
       setIsResized(false)
-      console.log("Haven't resized in 500ms!");
     }
 
     function onImgLoad(e) {
@@ -173,7 +171,7 @@ function SubGallery(props) {
     let imgStyle = {}, imgClassName = '';
     if (imgHeight !== null) {
       let currentWidth = imgWidth, currentHeight = imgHeight, currentTop = imgTop, currentLeft = imgLeft;
-      if (isHoovered === true) {
+      if (isHovered === true) {
         currentWidth = loadedImgWidth /(differential * 0.9);
         currentHeight = loadedImgHeight /(differential * 0.9);
         if (currentWidth > currentHeight) currentLeft = ((loadedImgWidth /(differential * 0.9)) - containerWidth) / 2;
@@ -191,7 +189,7 @@ function SubGallery(props) {
 
     return(
         <div className="box">
-          <div className="inner-box" onMouseEnter={()=> setIsHoovered(true)} onMouseLeave={()=> setIsHoovered(false)}>
+          <div className="inner-box" onMouseEnter={()=> setIsHovered(true)} onMouseLeave={()=> setIsHovered(false)}>
             <img style={imgStyle} className={imgClassName} src={picture.filename} onLoad={e => onImgLoad(e)}/>
             <div className="info-container">
                 <div className="left-container">

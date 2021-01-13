@@ -5,8 +5,12 @@ import Dropzone from 'react-dropzone';
 
 function FileUpload(props) {
     const [file, setFile] = useState(''); // storing the uploaded file    // storing the recived file from backend
-    const [data, getFile] = useState({ name: "", path: "" });
+    let initData = { name: "", path: "" };
+    if (props.existingImg) initData.path = props.existingImg;
+    const [data, getFile] = useState(initData);
     const [progress, setProgress] = useState(0); // progess bar
+    const [imgMarginTop, setImgMarginTop] = useState(0);
+    const [showImg, setShowImg] = useState(false);
 
     const el = useRef(); // accesing input element
 
@@ -14,19 +18,19 @@ function FileUpload(props) {
         if (file !== '') uploadFile()
     },[file])
 
-    const handleChange = (e) => {
-        setProgress(0)
-        const file = e.target.files[0]; // accesing file
-        console.log(file);
-        setFile(file); // storing file
-    }
-
     function handleDropUploader(files) {
         setProgress(0)
         const file = files[0]
-        console.log(file)
         setFile(file)
     }
+
+    function onUploadedImgLoad(e) {
+        const parentDivHeight = document.getElementById('inner-drop-zone').offsetHeight
+        const imgHeight = e.target.clientHeight
+        const newImgMarginTop = (parentDivHeight - imgHeight) / 2;
+        setImgMarginTop(newImgMarginTop)
+        setShowImg(true)
+    } 
 
     const uploadFile = () => {
         const formData = new FormData();
@@ -38,19 +42,20 @@ function FileUpload(props) {
                 setProgress(progress);
             }
         }).then(res => {
-            console.log(res);
             getFile({ name: res.data.name,
                      path: "http://localhost:80" + res.data.path
                    })
             props.updateInput(res.data.path)
         }).catch(err => console.log(err))}
         
-    let buttonDisplay;
-    if (file !== '') {
-        buttonDisplay = (
-            <button onClick={uploadFile} className="ui blue button upbutton">
-                Upload
-            </button>
+    let instructionContainerDisplay;
+    if (file === '' && !data.path) {
+        instructionContainerDisplay = (
+            <div className="instruction-container">
+                <i className="plus big icon"></i>
+                <hr/>
+                <span>Dra bild hit för att lägga till, eller klicka på plus ikonen</span>
+            </div> 
         )
     }
 
@@ -60,36 +65,20 @@ function FileUpload(props) {
 
     return (
         <div id="file-upload-container">
-            <div className="file-upload">
-                <input type="file" ref={el} onChange={handleChange} accept='image/*' />
-                <div className="ui progress bar progress-bar" style={{ width: progress }}></div>
-                <button onClick={uploadFile} className="ui blue button upbutton">
-                    Upload
-                </button>
-            <hr />
-            {/* displaying received image*/}
-            {data.path && <img src={data.path} alt={data.name} />}
+
             <Dropzone onDrop={acceptedFiles => handleDropUploader(acceptedFiles)}>
                 {({getRootProps, getInputProps}) => (
                     <div id="inner-drop-zone" {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <p>
-                            <div className={"inner-inner-drop-zone" + (file !== '' ? ' with-img' : '')}>
-                                <i className="plus big icon"></i>
-                                <hr/>
-                                <span>Dra bild hit för att lägga till, eller klicka på plus ikonen</span>
-                            </div>
-                            <div className="uploaded-img">
-                                {/* displaying received image*/}
-                                {data.path && <img src={data.path} alt={data.name} />}
-                            </div>
-                        </p> 
-                    </div>
-                                    )}
+                        <input {...getInputProps()} accept='image/*'/>
+                        {instructionContainerDisplay}
+                        <div className="uploaded-img">
+                            {data.path && <img src={data.path} alt={data.name} style={{marginTop:imgMarginTop + 'px', opacity:(showImg === true ? '1':'0')}} onLoad={e=>onUploadedImgLoad(e)}/>}
+                        </div>
+                    </div>                    
+                )}
             </Dropzone>
-                <div className={progressBarClassNames} style={{ width: "100%" }}>
-                    <div className="bar" style={{ width: progress + '%', minWidth: "0px" }}></div>
-                </div>
+            <div className={progressBarClassNames} style={{ width: "100%" }}>
+                <div className="bar" style={{ width: progress + '%', minWidth: "0px" }}></div>
             </div>
         </div>
     );
@@ -107,4 +96,15 @@ export default FileUpload;
       </div>
     </section>
   )}
+
+              <div className="file-upload">
+                <input type="file" ref={el} onChange={handleChange} accept='image/*' />
+                <div className="ui progress bar progress-bar" style={{ width: progress }}></div>
+                <button onClick={uploadFile} className="ui blue button upbutton">
+                    Upload
+                </button>
+            <hr />
+            {data.path && <img src={data.path} alt={data.name} />}
+
+
 </Dropzone> */

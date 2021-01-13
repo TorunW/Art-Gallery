@@ -1,82 +1,47 @@
 #file-upload-container {
   height: 100%;
   width: 100%;
+  background-color: white;
   
-    .file-upload {
+  .progress-bar{
+    transition: width 1.5s ease 1.5s !important;
+  }
+
+  #inner-drop-zone {
+    height: 332px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+    position: relative;
+    background-color: rgb(227, 227, 227);
+    border-radius: .28571429rem;
+
+    input[type=file] {
+      outline: none !important;
+      &:active {
+        outline: none !important;
+      }
+    }
+  
+    .instruction-container {
+      width: 100%;
+      cursor: pointer;
+      position: absolute;
+      top: calc(50% - 55px);
+      padding: 0 5%;
+
+      i {
+        font-size: 4em;
+      }
+    }
+    .uploaded-img {
       height: 100%;
       width: 100%;
-        .progress-bar{
 
-          transition: width 1.5s ease 1.5s !important;
+        img {
+          max-height: 100%;
+          max-width: 100%;
         }
-
-    #inner-drop-zone {
-        height: 100%;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 15px;
-
-      
-      p {
-        width: 100%;
-        height: 100%;
-        border-style: dotted;
-        cursor: pointer;
-
-        &:hover { 
-          .with-img {
-            opacity: 1;
-            z-index: 1;
-          }
-        }
-
-        .inner-inner-drop-zone {
-          margin: 0 auto;
-          position: absolute;
-
-          top: 30% !important;
-          left: 15% !important;
-
-          &.with-img{
-            opacity: 0;
-            z-index: 1000;
-          }
-
-          i {
-            font-size: 6rem;
-            position: relative;
-          }
-
-          span {
-            position: relative;
-          }
-
-          &.with-img {
-            opacity: 0;
-            &:hover {
-              opacity: 1;
-            }
-        }
-
-          }        
-
-        .uploaded-img {
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-
-          z-index: 0;
-
-            img {
-              margin: 29px auto;
-              max-width: 82%;
-              max-height: 85%;
-              z-index: 0;
-            }
-        }
-      }
     }
   }
 }

@@ -50,26 +50,31 @@ header nav a:hover {
   text-decoration: none;
 }
 section {
-  height: auto;
-  padding: 110px 15px 0px;
+  max-width: 1022px;
+  margin: 0 auto;
+  padding: 130px 15px 0px;
 }
-section .title {
+#about {
+  height: auto;
+  padding: 130px 15px 0px;
+}
+#about .title {
   margin-bottom: 30px;
 }
-section .title h1 {
+#about .title h1 {
   font-family: 'Raleway';
 }
-section .profile-img-container {
+#about .profile-img-container {
   overflow: hidden;
 }
-section .profile-img-container img {
+#about .profile-img-container img {
   max-height: auto;
   max-width: 100%;
 }
-section .description {
+#about .description {
   margin: 0 62px 0 69px;
 }
-section .description p {
+#about .description p {
   font-size: 16px;
   font-weight: bold;
 }
@@ -97,21 +102,22 @@ section .description p {
   header h1 {
     padding-left: 25px;
     text-align: left !important;
+    font-size: 20px !important;
   }
-  header i.bars {
+  header i.bars,
+  header i.close {
     position: absolute;
     right: 16px;
-    top: 27px;
+    top: 17px;
     font-size: 1.5rem;
   }
   header .drop-menu-container {
     position: absolute;
-    top: 100%;
-    right: 0px;
-    width: 161px;
-    background: whitesmoke;
-    padding: 10px;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    background: #dcdcdcd9;
+    text-align: center;
+    padding: 33px;
+    box-shadow: 0 2px 8px -2px #3e3e3e;
   }
   header .drop-menu-container ul {
     padding: 0;
@@ -123,6 +129,11 @@ section .description p {
   }
   header .drop-menu-container ul li a {
     color: black;
-    font-size: 20px;
+    font-size: 25px;
+  }
+  #gallery,
+  #paintings,
+  #sculptures {
+    padding: 65px 15px 0px;
   }
 }

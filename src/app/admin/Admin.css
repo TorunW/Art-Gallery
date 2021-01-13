@@ -1,44 +1,117 @@
-#admin {
+body {
+  background: whitesmoke;
+  /* price form arrows */
+  /* price form arrows */
+}
+body #admin {
   padding: 0 15px;
 }
-#admin .admin-table-container {
+body #admin .menu {
+  margin-top: 15px;
+}
+body #admin .admin-table-container {
   margin-top: 10px;
 }
-#admin table {
+body #admin .admin-table-container .form-header button {
+  margin-right: 15px;
+  float: left;
+}
+body #admin .admin-table-container .form-header h1 {
+  text-transform: capitalize;
+}
+body #admin .admin-table-container .img-thumbnail {
+  width: 100%;
+  height: 100px;
+  text-align: center;
+}
+body #admin .admin-table-container .img-thumbnail img {
+  max-width: 70%;
+  max-height: 100%;
+  margin: 0 auto;
+}
+body #admin .admin-table-container .table-header {
+  float: left;
+  width: 100%;
+}
+body #admin .admin-table-container .table-header h1 {
+  float: left;
+  text-transform: capitalize;
+  margin-top: 0;
+}
+body #admin .admin-table-container .table-header .add-img-button {
+  float: right;
+}
+body #admin .admin-table-container .dimmable {
+  float: left;
+  width: 100%;
+}
+body #admin .admin-table-container .dimmable .table {
+  table-layout: fixed;
+}
+body #admin .admin-table-container .dimmable .table tbody tr td {
+  vertical-align: middle;
+  word-break: break-all;
+}
+body #admin .admin-table-container .messages tr {
+  font-weight: bold;
+  background-color: white;
+}
+body #admin .admin-table-container .messages tr.read {
+  font-weight: normal;
+  box-shadow: none;
+  background-color: gainsboro;
+}
+body #admin .admin-table-container .messages tr button {
+  max-height: 36px;
+  max-width: 38.52px;
+}
+body #admin .admin-table-container .messages tr button .envelope {
+  text-align: justify;
+  font-size: large;
+}
+body #admin table {
   margin-top: 10px;
 }
-#admin .container {
+body #admin .container {
   width: fit-content;
 }
-#admin .container img {
+body #admin .container img {
   width: 300px !important;
   height: 300px;
 }
-/* price form arrows */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+body input::-webkit-outer-spin-button,
+body input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type=number] {
+body input[type=number] {
   -moz-appearance: textfield;
 }
-/* price form arrows */
-.add-item-form {
+body .add-item-form {
   box-shadow: rgba(99, 99, 99, 0.4) 0px 2px 8px 0px;
   padding-bottom: 40px;
+  height: 404px;
+  margin-top: 15px;
 }
-.add-item-form .form {
+body .add-item-form.missing-file #inner-drop-zone {
+  background-color: #fff6f6 !important;
+  color: #9f3a38;
+  box-shadow: 0 0 0 1px #e0b4b4 inset, 0 0 0 0 transparent;
+  background: #f8f8f9;
+  border-radius: 0.28571429rem;
+  transition: 1s;
+}
+body .add-item-form .form {
   padding-left: 50%;
   padding-top: 10px;
   padding-right: 70px;
 }
-.add-item-form .form .field input,
-.add-item-form .form .field select,
-.add-item-form .form .field textarea {
+body .add-item-form .form .field input,
+body .add-item-form .form .field select,
+body .add-item-form .form .field textarea {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
-.add-item-form .form .field #form-img-container {
+body .add-item-form .form .field #form-img-container {
   position: absolute;
   width: 50%;
   height: 100%;
@@ -47,18 +120,17 @@ input[type=number] {
   text-align: center;
   padding: 24px 40px;
 }
-.add-item-form .form .field #form-img-container .inner-img-container {
+body .add-item-form .form .field #form-img-container .inner-img-container {
   text-align: center;
   max-width: 100%;
   height: 100%;
-  background-color: yellow;
-  border-style: solid;
-  border-width: thin;
+  background-color: #e3e3e3;
+  border-radius: 0.28571429rem;
 }
-.add-item-form .form .field #form-img-container .inner-img-container img {
+body .add-item-form .form .field #form-img-container .inner-img-container img {
   max-width: 100%;
   max-height: 100%;
 }
-.add-item-form .form .button {
+body .add-item-form .form .button {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }

@@ -5,6 +5,16 @@ module.exports = function(passport, user) {
     var User = user;
     var LocalStrategy = require('passport-local').Strategy;
 
+    passport.serializeUser(function(user, done) {
+        done(null, user.id);
+      });
+      
+      passport.deserializeUser(function(id, done) {
+        User.findByPk(id, function(err, user) {
+          done(err, user);
+        });
+      });
+
     passport.use('local-signup', new LocalStrategy(
  
         {
@@ -103,6 +113,9 @@ passport.use('local-signin', new LocalStrategy(
  
  
     function(req, email, password, done) {
+
+        console.log(password, 'password')
+        console.log(email, 'email')
  
         var User = user;
  

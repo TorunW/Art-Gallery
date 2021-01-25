@@ -7,7 +7,7 @@ const sequelize = new Sequelize('Charlee', 'postgres', 'Hallo', {
 
 const User = sequelize.define('User', {
     // Model attributes are defined here
-    username: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -23,3 +23,5 @@ const User = sequelize.define('User', {
   
 // `sequelize.define` also returns the model
 console.log(User === sequelize.models.User); // true
+
+module.exports = User;

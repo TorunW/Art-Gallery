@@ -7,7 +7,7 @@ import { Link, Route } from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import Admin from './admin/Admin';
 import SubGallery from './gallery/SubGallery';
-import UserLogin from './partials/signin';
+import UserSignin from './partials/signin';
 
 function App(props) {
 
@@ -147,7 +147,7 @@ function SectionsContainer(props) {
       {sectionsDisplay}
       {adminSectionDisplay}
       <Route exact path="/signin">
-        <UserLogin/>
+        <UserSignin/>
       </Route>
     </main>
   )

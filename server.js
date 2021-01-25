@@ -10,20 +10,13 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-
-//Models
-var models = require("./models"); 
- 
-var authRoute = require('./routes/auth.js')(app,passport);
-
-require('./config/passport/passport.js')(passport, models.user);
-
-//Sync Database
-models.sequelize.sync().then(function() {
-  console.log('Nice! Database looks fine')
-}).catch(function(err) {
-  console.log(err, "Something went wrong with the Database Update!")
-});
+app.use(cors());
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
 
 app.use(session({
   secret: 'keyboard cat',
@@ -33,13 +26,24 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-app.use(cors());
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-)
+//Models
+var models = require("./models");
+var User = require("./models/user")
+console.log(User)
+
+//Sync Database
+models.sequelize.sync().then(function() {
+  console.log('Nice! Database looks fine')
+}).catch(function(err) {
+  console.log(err, "Something went wrong with the Database Update!")
+});
+
+console.log(models.User, 'models.user')
+
+var authRoute = require('./routes/auth.js')(app,passport);
+
+require('./config/passport/passport.js')(passport, models.User);
+
 app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/uploads'));
 

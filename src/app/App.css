@@ -21,16 +21,23 @@ header {
   z-index: 1000;
 }
 header h1 {
-  margin: 15px 0 10px 0 !important;
+  margin: 15px 0 5px 0 !important;
   text-align: center !important;
   font-family: 'Raleway' !important;
   font-weight: 200 !important;
-  font-size: 37px !important;
+  font-size: 30px !important;
+}
+header h1 #main {
+  color: black;
+}
+header h1 #main:hover {
+  color: black;
+  text-decoration: none;
 }
 header nav {
   display: flex;
   justify-content: center;
-  font-size: 16px;
+  font-size: 15px;
 }
 header nav ul {
   list-style-type: none;
@@ -52,7 +59,7 @@ header nav a:hover {
 section {
   max-width: 1022px;
   margin: 0 auto;
-  padding: 130px 15px 0px;
+  padding: 100px 15px 0px;
 }
 #about {
   height: auto;
@@ -79,14 +86,17 @@ section {
   font-weight: bold;
 }
 #contact {
+  height: auto;
+  padding: 130px 15px 0px;
+}
+#contact #contact-container {
   width: 500px;
-  margin-left: 15px;
   font-weight: bold;
 }
-#contact .form-control {
+#contact #contact-container .form-control {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
-#contact .btn-primary {
+#contact #contact-container .btn-primary {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .ui.modal:not(.compact) {

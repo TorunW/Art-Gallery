@@ -72,7 +72,12 @@ function FileUpload(props) {
                         <input {...getInputProps()} accept='image/*'/>
                         {instructionContainerDisplay}
                         <div className="uploaded-img">
-                            {data.path && <img src={data.path} alt={data.name} style={{marginTop:imgMarginTop + 'px', opacity:(showImg === true ? '1':'0')}} onLoad={e=>onUploadedImgLoad(e)}/>}
+                            {data.path && 
+                                <img src={data.path} 
+                                alt={data.name} 
+                                style={{marginTop:imgMarginTop + 'px', opacity:(showImg === true ? '1':'0')}} 
+                                onLoad={e=>onUploadedImgLoad(e)}/>
+                            }
                         </div>
                     </div>                    
                 )}
@@ -85,26 +90,3 @@ function FileUpload(props) {
 }
 
 export default FileUpload;
-
-/*
-<Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
-  {({getRootProps, getInputProps}) => (
-    <section>
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      </div>
-    </section>
-  )}
-
-              <div className="file-upload">
-                <input type="file" ref={el} onChange={handleChange} accept='image/*' />
-                <div className="ui progress bar progress-bar" style={{ width: progress }}></div>
-                <button onClick={uploadFile} className="ui blue button upbutton">
-                    Upload
-                </button>
-            <hr />
-            {data.path && <img src={data.path} alt={data.name} />}
-
-
-</Dropzone> */

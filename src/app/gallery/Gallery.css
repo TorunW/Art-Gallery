@@ -10,7 +10,7 @@
 }
 @media (max-width: 576px) {
   #gallery #gallery-pictures {
-    column-count: 1 !important;
+    column-count: 2 !important;
   }
 }
 @media (min-width: 576px) and (max-width: 768px) {

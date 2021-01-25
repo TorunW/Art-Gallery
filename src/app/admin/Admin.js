@@ -3,6 +3,7 @@ import './Admin.css';
 import DBTableRender from './DbTableRender';
 import $ from 'jquery';
 import { Icon, Label, Menu } from 'semantic-ui-react';
+import {renderDisplayName} from '../helpers';
 
 function Admin(props) {
 
@@ -19,7 +20,6 @@ function Admin(props) {
       url:'http://localhost:80/countreadmsg',
       type:'GET'
     }).done(function(res) {
-      console.log(res)
       setMsgCounter(res[0].count);
     })
   }
@@ -28,7 +28,7 @@ function Admin(props) {
     let menuItemclassName = 'item';
     if (currentSection === table) menuItemclassName += ' active';
     let msgCounterDisplay;
-    if (table === 'messages' && msgCounter !== 0) {
+    if (table === 'messages' && msgCounter !== '0') {
       msgCounterDisplay = (
         <Label color='red' floating>
           {msgCounter}
@@ -38,13 +38,13 @@ function Admin(props) {
     return (
       <Menu.Item as="a" className={menuItemclassName} onClick={() => setCurrentSection(table)}>
         <Icon name={table === 'pictures' ? 'picture' : table === 'messages' ? 'mail' : 'user'}/>
-        {table}
+        {renderDisplayName(table)}
         {msgCounterDisplay}
       </Menu.Item>
     )
   })
 
-  let contentDisplay = <div>Hello im admin homepage</div>
+  let contentDisplay = 'hello im admin'
   if (currentSection !== "admin"){
     contentDisplay = dbTables.map((table, index) => {
       if (currentSection === table) {
@@ -63,7 +63,6 @@ function Admin(props) {
       <Menu compact>
           <Menu.Item as='a' className={mainMenuItemclassNameName} onClick={() => setCurrentSection("admin")}>
             Admin main
-
           </Menu.Item>
           {navItemsDisplay}
       </Menu>

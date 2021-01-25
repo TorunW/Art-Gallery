@@ -3,12 +3,11 @@ import './App.css';
 import GallerySection from './gallery/Gallery';
 import $ from 'jquery';
 import SimpleReactLightbox from "simple-react-lightbox";
-import { SRLWrapper } from "simple-react-lightbox";
-import {breakArrayIntoChunksHelper} from './helpers';
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import Admin from './admin/Admin';
 import SubGallery from './gallery/SubGallery';
+import UserLogin from './partials/signin';
 
 function App(props) {
 
@@ -46,9 +45,11 @@ function Header(props) {
   const [ showdropMenu, setShowDropMenu ] = useState(false)
 
   const navItemsDisplay = props.navigation.map((menuItem, index) => {
-    return (
-      <li key={index}><Link to={menuItem.nav_link}>{menuItem.title}</Link></li>
-    )
+    if (menuItem.title !== 'home') {
+      return (
+        <li key={index}><Link onClick={()=> setShowDropMenu(false)} to={menuItem.nav_link}>{menuItem.display_name}</Link></li>
+      )
+    }
   })
 
   let menuDisplay = (
@@ -74,7 +75,9 @@ function Header(props) {
   }
   return (
     <header>
-      <h1>Charlotte Karlbom</h1>
+      <h1>
+        <a id="main" href="/">Charlotte Karlbom</a>
+      </h1>
         {menuDisplay}
         {dropMenuDisplay}
     </header>
@@ -91,6 +94,9 @@ function SectionsContainer(props) {
       )
       
       switch (section.title) {
+        case 'signin':
+          sectionHtmlDisplay = null;
+          break;
         case 'home':
           sectionHtmlDisplay = (
             <Route exact path="/"><GallerySection/></Route>
@@ -138,8 +144,11 @@ function SectionsContainer(props) {
   )
   return(
     <main>
-     {sectionsDisplay}
-     {adminSectionDisplay}
+      {sectionsDisplay}
+      {adminSectionDisplay}
+      <Route exact path="/signin">
+        <UserLogin/>
+      </Route>
     </main>
   )
 }
@@ -293,6 +302,9 @@ function postMessage() {
     data: {name:name, email:email, msg:message }
   }).done(function(res) {
     setIsSubmitted(true)
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 3000);
   })
 }
 
@@ -305,23 +317,25 @@ function postMessage() {
   }
 
   let formDisplay = (
-    <form>
-    <div className="form-group">
-      <label>Name</label>
-      <input type="text" value={name} className="form-control" placeholder="Enter Name" onChange={(e) => onNameChange(e)}/>
-      {nameErrorDisplay}
+    <div id="contact-container">
+      <form className="ui form">
+        <div className="field">
+          <label>Namn</label>
+          <input type="text" value={name} className="form-control" placeholder="Namn" onChange={(e) => onNameChange(e)}/>
+          {nameErrorDisplay}
+        </div>
+        <div className="field">
+          <label>Emailadress</label>
+          <input type="email" value={email} className="form-control" placeholder="Email" onChange={(e) => onEmailChange(e)}/>
+          {emailErrorDisplay}
+        </div>
+        <div className="field">
+          <label>Ditt meddelande</label>
+          <textarea className="form-control" rows="5" onChange={(e) => onMessageChange(e)}>{message}</textarea>
+        </div>
+        <button type="submit" onClick={(e) => onSubmit(e)} className="ui submit button">Skicka meddelande</button>
+      </form>
     </div>
-    <div className="form-group">
-      <label for="exampleInputEmail1">Email address</label>
-      <input type="email" value={email} className="form-control" placeholder="Enter email" onChange={(e) => onEmailChange(e)}/>
-      {emailErrorDisplay}
-    </div>
-    <div className="form-group">
-      <label>Your message</label>
-      <textarea className="form-control" rows="5" onChange={(e) => onMessageChange(e)}>{message}</textarea>
-    </div>
-    <button type="submit" onClick={(e) => onSubmit(e)} className="btn btn-primary">Submit</button>
-  </form>
   )
 
   if (isSubmitted === true) formDisplay=<p>Tack för ditt meddelande!</p>

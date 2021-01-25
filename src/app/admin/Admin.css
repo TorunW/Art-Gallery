@@ -6,11 +6,30 @@ body {
 body #admin {
   padding: 0 15px;
 }
+body #admin .ui.message {
+  transition: 2s !important;
+}
+body #admin .fadeout {
+  opacity: 0 !important;
+}
 body #admin .menu {
   margin-top: 15px;
 }
+body #admin body {
+  background-color: #ECF0F1;
+}
+body #admin .page-login {
+  margin-top: 25px;
+}
 body #admin .admin-table-container {
   margin-top: 10px;
+}
+body #admin .admin-table-container #messages-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  min-width: 300px;
 }
 body #admin .admin-table-container .form-header button {
   margin-right: 15px;
@@ -18,6 +37,7 @@ body #admin .admin-table-container .form-header button {
 }
 body #admin .admin-table-container .form-header h1 {
   text-transform: capitalize;
+  width: 100%;
 }
 body #admin .admin-table-container .img-thumbnail {
   width: 100%;
@@ -36,7 +56,12 @@ body #admin .admin-table-container .table-header {
 body #admin .admin-table-container .table-header h1 {
   float: left;
   text-transform: capitalize;
-  margin-top: 0;
+  margin: 0;
+  width: 100%;
+}
+body #admin .admin-table-container .table-header .menu {
+  float: left;
+  margin: 0;
 }
 body #admin .admin-table-container .table-header .add-img-button {
   float: right;

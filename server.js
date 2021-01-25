@@ -1,12 +1,37 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-const path = require('path')
-const db = require('./routes/queries');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const path = require('path');
+const routes = require('./routes/queries');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
+
+//Models
+var models = require("./models"); 
+ 
+var authRoute = require('./routes/auth.js')(app,passport);
+
+require('./config/passport/passport.js')(passport, models.user);
+
+//Sync Database
+models.sequelize.sync().then(function() {
+  console.log('Nice! Database looks fine')
+}).catch(function(err) {
+  console.log(err, "Something went wrong with the Database Update!")
+});
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 app.use(cors());
 app.use(bodyParser.json())
@@ -20,36 +45,60 @@ app.use(express.static(__dirname + '/uploads'));
 
 app.use(fileUpload());
 
+app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true})); // session secret
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (!user.verifyPassword(password)) { return done(null, false); }
+      return done(null, user);
+    });
+  }
+));
+
+app.post('/login', 
+  passport.authenticate(
+    'local', 
+    {  
+      failureRedirect: '/login',
+      login: (req, res) => {
+        const { user } = req
+      
+        res.json(user)
+      }
+    }
+  ),
+  function(req, res) {
+    res.redirect('/admin');
+  }
+);
 
 app.get(['/','/admin/', '/sculptures', '/paintings', '/contact'], function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+app.get('/pictures', routes.getPictures)
+app.get('/pictures/:picture_type', routes.getPicturesByType)
+app.post('/pictures', routes.createPicture)
+app.delete('/pictures/:id', routes.deletePicture)
+app.put('/pictures/:id', routes.updatePicture)
 
-app.get('/users', db.getUsers)
-app.get('/users/:id', db.getUserById)
-app.post('/users', db.createUser)
-app.put('/users/:id', db.updateUser)  
-app.delete('/users/:id', db.deleteUser)
+app.get('/navigation', routes.getNavigation)
 
-app.get('/pictures', db.getPictures)
-app.get('/pictures/:picture_type', db.getPicturesByType)
-app.post('/pictures', db.createPicture)
-app.delete('/pictures/:id', db.deletePicture)
-app.put('/pictures/:id', db.updatePicture)
+app.post('/messages', routes.createMessage)
+app.get('/messages', routes.getMessages)
+app.get('/countreadmsg', routes.countReadMsg)
+app.put('/messages/:id', routes.updateMessages)
+app.delete('/messages/:id', routes.deleteMessage)
 
-app.get('/navigation', db.getNavigation)
+app.get('/about', routes.getAbout)
+app.put('/about', routes.updateAbout)
 
-app.post('/messages', db.createMessage)
-app.get('/messages', db.getMessages)
-app.get('/countreadmsg', db.countReadMsg)
-app.put('/messages/:id', db.updateMessages)
-app.delete('/messages/:id', db.deleteMessage)
-
-app.get('/about', db.getAbout)
-app.put('/about', db.updateAbout)
-
-app.get('/tables', db.getTableNames)
+app.get('/tables', routes.getTableNames)
 
 // file upload api
 app.post('/upload', (req, res) => {

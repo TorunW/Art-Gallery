@@ -24,16 +24,23 @@
     z-index: 1000;
 
     h1 {
-        margin: 15px 0 10px 0 !important;
+        margin: 15px 0 5px 0 !important;
         text-align: center !important;
         font-family: 'Raleway' !important;
         font-weight: 200 !important;
-        font-size: 37px !important;
+        font-size: 30px !important;
+        #main {
+          color: black;
+          &:hover {
+            color: black;
+            text-decoration: none;
+          }
+        }
     }
     nav {
         display: flex;
         justify-content: center;
-        font-size: 16px;
+        font-size: 15px;
 
         ul {
           list-style-type: none;
@@ -61,7 +68,7 @@
   section {
     max-width: 1022px;
     margin: 0 auto;
-    padding: 130px 15px 0px;
+    padding: 100px 15px 0px;
   }
   
   #about {
@@ -96,16 +103,20 @@
   }
 
 #contact {
-  width: 500px;
-  margin-left: 15px;
-  font-weight: bold;
+  height: auto;
+  padding: 130px 15px 0px;
 
-  .form-control {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  }
+  #contact-container {
+    width: 500px;
+    font-weight: bold;
 
-  .btn-primary {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    .form-control {
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+
+    .btn-primary {
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
   }
 }
 

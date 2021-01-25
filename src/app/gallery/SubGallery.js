@@ -1,7 +1,8 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { SRLWrapper } from "simple-react-lightbox";
-import {breakArrayIntoChunksHelper} from '../helpers';
+import { breakArrayIntoChunksHelper } from '../helpers';
 import './SubGallery.css';
+import { isMobile } from "react-device-detect";
 
 function SubGallery(props) {
  
@@ -116,12 +117,18 @@ function SubGallery(props) {
     const [isHovered, setIsHovered] = useState(false)
     const [differential, setDifferential] = useState(null)
     const [isResized, setIsResized] = useState(false)
+    const [inFrame, setInFrame] = useState(false)
 
     let resizeTimeout;
 
     useEffect(() => {
       window.addEventListener('resize', onWindowResize);
+      if (isMobile === true) window.addEventListener('scroll', onMobileScroll);
     },[])
+
+    useEffect(() => {
+      setIsHovered(inFrame)
+    },[inFrame])
 
     useEffect(() => {
       updateImgDimensions();
@@ -130,6 +137,19 @@ function SubGallery(props) {
     useEffect(() => {
       if (loadedImgHeight !== null && loadedImgWidth !== null) updateImgDimensions();
     },[loadedImgHeight, loadedImgWidth])
+
+
+    function onMobileScroll() {
+      const el = document.getElementById('picture-' + picture.picture_id)
+      var viewportOffset =
+      el.getBoundingClientRect();
+      //these are relative to the viewport, i.e the window
+      var top = viewportOffset.top;
+      var left = viewportOffset.left;
+      const elHeight = el.offsetHeight
+      const newInFrame = (top + elHeight) < window.innerHeight && top > 0
+      setInFrame(newInFrame)
+    }
   
     function onWindowResize(){
       setIsResized(true)
@@ -188,7 +208,7 @@ function SubGallery(props) {
 
 
     return(
-        <div className="box">
+        <div className="box" id={"picture-" + picture.picture_id}>
           <div className="inner-box" onMouseEnter={()=> setIsHovered(true)} onMouseLeave={()=> setIsHovered(false)}>
             <img style={imgStyle} className={imgClassName} src={picture.filename} onLoad={e => onImgLoad(e)}/>
             <div className="info-container">

@@ -1,14 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const path = require('path');
-const routes = require('./routes/queries');
-const cors = require('cors');
-const fileUpload = require('express-fileupload');
-const fs = require('fs');
-const session = require('express-session');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+var express = require('express');
+var bodyParser = require('body-parser');
+var app = express();
+var path = require('path');
+var routes = require('./routes/queries');
+var cors = require('cors');
+var fileUpload = require('express-fileupload');
+var fs = require('fs');
+var passport = require('passport');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
 
 app.use(cors());
 app.use(bodyParser.json())
@@ -18,18 +18,11 @@ app.use(
   })
 )
 
-app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true
-})); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
+app.use(express.static(__dirname + '/build'));
+app.use(express.static(__dirname + '/uploads'));
 
 //Models
 var models = require("./models");
-var User = require("./models/user")
-console.log(User)
 
 //Sync Database
 models.sequelize.sync().then(function() {
@@ -37,51 +30,21 @@ models.sequelize.sync().then(function() {
 }).catch(function(err) {
   console.log(err, "Something went wrong with the Database Update!")
 });
-
-console.log(models.User, 'models.user')
+require('./config/passport/passport.js')(passport, models.User);
+app.use(cookieParser("schlombaps")); //i let this blank
+app.use(session({
+  secret: 'schlombaps',
+  resave: true,
+  saveUninitialized: true
+})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 var authRoute = require('./routes/auth.js')(app,passport);
 
-require('./config/passport/passport.js')(passport, models.User);
-
-app.use(express.static(__dirname + '/build'));
-app.use(express.static(__dirname + '/uploads'));
-
 app.use(fileUpload());
 
-app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true})); // session secret
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
-      return done(null, user);
-    });
-  }
-));
-
-app.post('/login', 
-  passport.authenticate(
-    'local', 
-    {  
-      failureRedirect: '/login',
-      login: (req, res) => {
-        const { user } = req
-      
-        res.json(user)
-      }
-    }
-  ),
-  function(req, res) {
-    res.redirect('/admin');
-  }
-);
-
-app.get(['/','/admin/', '/sculptures', '/paintings', '/contact'], function (req, res) {
+app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 

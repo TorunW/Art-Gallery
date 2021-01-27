@@ -16,5 +16,5 @@ exports.logout = function(req, res) {
 }
 
 exports.admin = function(req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../build', 'index.html'));
 }

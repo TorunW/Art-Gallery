@@ -5,15 +5,19 @@ module.exports = function(passport, user) {
     var User = user;
     var LocalStrategy = require('passport-local').Strategy;
 
+
     passport.serializeUser(function(user, done) {
+        console.log(user.id, 'serialize user');
         done(null, user.id);
-      });
+    });
       
-      passport.deserializeUser(function(id, done) {
+    passport.deserializeUser(function(id, done) {
+        console.log(id, "deserialize user");
         User.findByPk(id, function(err, user) {
+            console.log("found a user iwht pk fskaj fkasfj asf jksa fajkd")
           done(err, user);
         });
-      });
+    });
 
     passport.use('local-signup', new LocalStrategy(
  
@@ -97,74 +101,64 @@ module.exports = function(passport, user) {
     ));
 
     //LOCAL SIGNIN
-passport.use('local-signin', new LocalStrategy(
- 
-    {
- 
-        // by default, local strategy uses username and password, we will override with email
- 
-        usernameField: 'email',
- 
-        passwordField: 'password',
- 
-        passReqToCallback: true // allows us to pass back the entire request to the callback
- 
-    },
- 
- 
-    function(req, email, password, done) {
+    passport.use('local-signin', new LocalStrategy(
+    
+        {
+            // by default, local strategy uses username and password, we will override with email
+            usernameField: 'email',
+            passwordField: 'password',
+            passReqToCallback: true // allows us to pass back the entire request to the callback
+        },
+    
+    
+        function(req, email, password, done) {
 
-        console.log(password, 'password')
-        console.log(email, 'email')
- 
-        var User = user;
- 
-        var isValidPassword = function(userpass, password) {
- 
-            return bCrypt.compareSync(password, userpass);
- 
-        }
- 
-        User.findOne({
-            where: {
-                email: email
+            var User = user;    
+            var isValidPassword = function(userpass, password) {
+                return bCrypt.compareSync(password, userpass);
             }
-        }).then(function(user) {
- 
-            if (!user) {
- 
-                return done(null, false, {
-                    message: 'Email does not exist'
+            User.findOne({
+                where: {
+                    email: email
+                }
+            }).then(function(user) { 
+
+                if (!user) {
+                    return done(null, false, {
+                        message: 'Email does not exist'
+                    });
+                }
+    
+                //if (!isValidPassword(user.password, password)) {
+                if (user.password !== password) {
+                    return done(null, false, {
+                        message: 'Incorrect password.'
+                    });    
+                }
+
+                req.logIn(user, function(err) {
+                    var userinfo = user.get();
+                    req.session.user = user;
+                    req.session.save(function (err) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            return done(null, userinfo);
+                        }
+                    });
                 });
- 
-            }
- 
-            //if (!isValidPassword(user.password, password)) {
-            if (user.password !== password) {
+
+                /*var userinfo = user.get();
+                console.log(userinfo, 'userinfo');
+                return done(null, userinfo);*/
+    
+            }).catch(function(err) {
+                console.log("Error:", err);
                 return done(null, false, {
-                    message: 'Incorrect password.'
+                    message: 'Something went wrong with your Signin'
                 });
- 
-            }
- 
- 
-            var userinfo = user.get();
-            return done(null, userinfo);
- 
- 
-        }).catch(function(err) {
- 
-            console.log("Error:", err);
- 
-            return done(null, false, {
-                message: 'Something went wrong with your Signin'
             });
- 
-        });
- 
- 
-    }
- 
-));
- 
+        }
+    ));
+
 }

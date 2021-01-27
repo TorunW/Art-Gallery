@@ -83,7 +83,7 @@ function DBTableRender(props) {
     function deleteItem(item) {
       console.log("delete")
         $.ajax({
-            url:'http://localhost:80'+ props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
+            url:'http://localhost:34296'+ props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
             type:'DELETE'
           }).done(function(res) {
             beforeGetItems('delete', item, 'success')
@@ -92,7 +92,7 @@ function DBTableRender(props) {
 
     function onReadButtonClick(item) {
         $.ajax({
-            url:'http://localhost:80'+ props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
+            url:'http://localhost:34296'+ props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
             type:'PUT', 
             data: {read:(item.read === true ? false : true)}
           }).done(function(res) {

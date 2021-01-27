@@ -2,7 +2,7 @@
   "name": "charlee",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:80",
+  "proxy": "http://localhost:34296",
   "dependencies": {
     "@aeaton/react-prosemirror": "^0.22.1",
     "@ckeditor/ckeditor5-build-classic": "^24.0.0",

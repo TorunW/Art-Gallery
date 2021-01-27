@@ -17,7 +17,7 @@ function Admin(props) {
 
   function countMsg() {
     $.ajax({
-      url:'http://localhost:80/countreadmsg',
+      url:'http://localhost:34296/countreadmsg',
       type:'GET'
     }).done(function(res) {
       setMsgCounter(res[0].count);

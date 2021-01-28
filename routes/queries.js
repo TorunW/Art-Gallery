@@ -1,9 +1,13 @@
-const Pool = require('pg').Pool
+const Pool = require('pg').Pool;
+const path = require("path");
+var env = process.env.NODE_ENV || "development";
+var config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
+
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'Charlee',
-  password: 'Hallo',
+  user: config.username,
+  host: config.host,
+  database: config.database,
+  password: config.password,
   port: 5432,
 })
 

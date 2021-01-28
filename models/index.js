@@ -1,11 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('Charlee', 'postgres', 'Hallo', {
-  host: 'localhost',
-  dialect: 'postgres'
-});
-
+var env = process.env.NODE_ENV || "development";
+var config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
+const sequelize = new Sequelize('postgres://'+config.username+':'+config.password+'@'+config.host+':5432/'+config.database+'')
 let db = {};
 
 fs

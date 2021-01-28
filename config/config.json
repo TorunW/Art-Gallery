@@ -1,0 +1,16 @@
+{
+    "development": {
+        "username": "postgres",
+        "password": "Hallo",
+        "database": "Charlee",
+        "host": "localhost",
+        "port": 5432
+    },
+    "production": {
+        "username": "torunwah_torun",
+        "password": "Hallo",
+        "database": "torunwah_charlee",
+        "host": "localhost",
+        "port": 5432
+    }
+}

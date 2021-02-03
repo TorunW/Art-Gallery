@@ -25,34 +25,9 @@ app.use(
 app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/uploads'));
 
-<<<<<<< HEAD
-app.use(cookieParser("schlombaps")); //i let this blank
-app.use(session({
-  secret: 'schlombaps',
-  resave: true,
-  saveUninitialized: true
-})); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
+/* setup */
 
-//Models
-var models = require("./models");
-var authRoute = require('./routes/auth.js')(app,passport);
-require('./config/passport/passport.js')(passport, models.User);
-
-//Sync Database
-models.sequelize.sync().then(function() {
-  console.log('Nice! Database looks fine')
-}).catch(function(err) {
-  console.log(err, "Something went wrong with the Database Update!")
-});
-=======
-app.use(fileUpload());
-
-/* /setup */
-
-/* routes - should be moved to routes & controllers */
->>>>>>> b104fd3df20c8d753fadef6900dd5744a0f09697
+/* routes - move to routes & controllers! */
 
 var routes = require('./server/routes/queries');
 
@@ -115,29 +90,3 @@ app.listen(PORT, () => {
   console.log('YO YO YO BIACH');
   console.log(`Server is listening on port ${PORT}`);
 });
-
-//Models
-
-/*var models = require("./models");
-
-var passport = require('passport');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-
-//Sync Database
-models.sequelize.sync().then(function() {
-  console.log('Nice! Database looks fine')
-}).catch(function(err) {
-  console.log(err, "Something went wrong with the Database Update!")
-});
-require('./config/passport/passport.js')(passport, models.User);
-app.use(cookieParser("schlombaps")); //i let this blank
-app.use(session({
-  secret: 'schlombaps',
-  resave: true,
-  saveUninitialized: true
-})); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-
-var authRoute = require('./routes/auth.js')(app,passport);*/

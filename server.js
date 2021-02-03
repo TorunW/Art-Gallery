@@ -22,7 +22,7 @@ app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/uploads'));
 
 //Models
-var models = require("./models");
+/*var models = require("./models");
 
 //Sync Database
 models.sequelize.sync().then(function() {
@@ -40,7 +40,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-var authRoute = require('./routes/auth.js')(app,passport);
+var authRoute = require('./routes/auth.js')(app,passport);*/
 
 app.use(fileUpload());
 

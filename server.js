@@ -31,7 +31,7 @@ app.use(express.static(__dirname + '/uploads'));
 
 var routes = require('./server/routes/queries');
 
-app.get('/', function (req, res) {
+app.get(['/','/admin'], function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 

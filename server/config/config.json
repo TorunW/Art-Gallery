@@ -12,5 +12,12 @@
         "database": "torunwah_charlee",
         "host": "localhost",
         "port": 5432
+    },
+    "david":{
+        "username":"postgres",
+        "password":"postgres",
+        "database":"Charlee",
+        "host":"localhost",
+        "port":5433
     }
 }

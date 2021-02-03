@@ -1,14 +1,18 @@
+/* imports */
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var path = require('path');
-var routes = require('./routes/queries');
 var cors = require('cors');
 var fileUpload = require('express-fileupload');
 var fs = require('fs');
-var passport = require('passport');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
+
+/* /imports */
+
+/* setup */
+
+require('dotenv').config();
 
 app.use(cors());
 app.use(bodyParser.json())
@@ -21,6 +25,7 @@ app.use(
 app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/uploads'));
 
+<<<<<<< HEAD
 app.use(cookieParser("schlombaps")); //i let this blank
 app.use(session({
   secret: 'schlombaps',
@@ -41,8 +46,15 @@ models.sequelize.sync().then(function() {
 }).catch(function(err) {
   console.log(err, "Something went wrong with the Database Update!")
 });
-
+=======
 app.use(fileUpload());
+
+/* /setup */
+
+/* routes - should be moved to routes & controllers */
+>>>>>>> b104fd3df20c8d753fadef6900dd5744a0f09697
+
+var routes = require('./server/routes/queries');
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
@@ -94,11 +106,38 @@ app.post('/delete', (req, res) => {
   }
 })
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 8000;
-}
-app.listen(process.env.PORT || 34296, () => {
+/* / routes - should be moved to routes & controllers */
+
+let PORT = process.env.PORT;
+if (PORT == null || PORT == "") PORT = 34296;
+
+app.listen(PORT, () => {
   console.log('YO YO YO BIACH');
+  console.log(`Server is listening on port ${PORT}`);
 });
 
+//Models
+
+/*var models = require("./models");
+
+var passport = require('passport');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+
+//Sync Database
+models.sequelize.sync().then(function() {
+  console.log('Nice! Database looks fine')
+}).catch(function(err) {
+  console.log(err, "Something went wrong with the Database Update!")
+});
+require('./config/passport/passport.js')(passport, models.User);
+app.use(cookieParser("schlombaps")); //i let this blank
+app.use(session({
+  secret: 'schlombaps',
+  resave: true,
+  saveUninitialized: true
+})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+var authRoute = require('./routes/auth.js')(app,passport);*/

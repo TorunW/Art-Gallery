@@ -8,7 +8,7 @@ const pool = new Pool({
   host: config.host,
   database: config.database,
   password: config.password,
-  port: 5432,
+  port: config.port,
 })
 
 /** PICTURES */

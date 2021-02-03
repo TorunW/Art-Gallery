@@ -87,6 +87,5 @@ let PORT = process.env.PORT;
 if (PORT == null || PORT == "") PORT = 34296;
 
 app.listen(PORT, () => {
-  console.log('YO YO YO BIACH');
   console.log(`Server is listening on port ${PORT}`);
 });

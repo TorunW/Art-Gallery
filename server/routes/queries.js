@@ -3,6 +3,14 @@ const path = require("path");
 var env = process.env.NODE_ENV || "development";
 var config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
 
+console.log('*************')
+console.log(config.username);
+console.log(config.host);
+console.log(config.database);
+console.log(config.password);
+console.log(config.port);
+console.log('**************');
+
 const pool = new Pool({
   user: config.username,
   host: config.host,

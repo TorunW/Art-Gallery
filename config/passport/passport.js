@@ -56,7 +56,7 @@ module.exports = function(passport, user) {
                     return done(null, false, {
                         message: 'That email is already taken'
                     });
- 
+
                 } else
  
                 {
@@ -93,11 +93,8 @@ module.exports = function(passport, user) {
                     });
  
                 }
- 
             });
- 
         }
- 
     ));
 
     //LOCAL SIGNIN
@@ -136,21 +133,9 @@ module.exports = function(passport, user) {
                     });    
                 }
 
-                req.logIn(user, function(err) {
-                    var userinfo = user.get();
-                    req.session.user = user;
-                    req.session.save(function (err) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            return done(null, userinfo);
-                        }
-                    });
-                });
-
-                /*var userinfo = user.get();
+                var userinfo = user.get();
                 console.log(userinfo, 'userinfo');
-                return done(null, userinfo);*/
+                return done(null, userinfo);
     
             }).catch(function(err) {
                 console.log("Error:", err);

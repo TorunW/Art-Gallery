@@ -21,16 +21,6 @@ app.use(
 app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/uploads'));
 
-//Models
-var models = require("./models");
-
-//Sync Database
-models.sequelize.sync().then(function() {
-  console.log('Nice! Database looks fine')
-}).catch(function(err) {
-  console.log(err, "Something went wrong with the Database Update!")
-});
-require('./config/passport/passport.js')(passport, models.User);
 app.use(cookieParser("schlombaps")); //i let this blank
 app.use(session({
   secret: 'schlombaps',
@@ -40,7 +30,17 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
+//Models
+var models = require("./models");
 var authRoute = require('./routes/auth.js')(app,passport);
+require('./config/passport/passport.js')(passport, models.User);
+
+//Sync Database
+models.sequelize.sync().then(function() {
+  console.log('Nice! Database looks fine')
+}).catch(function(err) {
+  console.log(err, "Something went wrong with the Database Update!")
+});
 
 app.use(fileUpload());
 

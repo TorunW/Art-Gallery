@@ -13,7 +13,7 @@ console.log('**************');
 
 const pool = new Pool({
   user: config.username,
-  host: config.host,
+  host: process.env.DATABASE_URI || process.env.DATABASE_URL || config.host,
   database: config.database,
   password: config.password,
   port: config.port,

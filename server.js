@@ -88,4 +88,5 @@ if (PORT == null || PORT == "") PORT = 34296;
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
+  console.log(`DB URI ${process.env.DATABASE_URI}`)
 });

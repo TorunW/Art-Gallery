@@ -7,11 +7,11 @@
         "port": 5432
     },
     "production": {
-        "username": "torunwah_torun",
-        "password": "Hallo",
-        "database": "torunwah_charlee",
-        "host": "localhost",
-        "port": 5432
+        "username": "doadmin",
+        "password": "l87efn096vfvuw9t",
+        "database": "defaultdb",
+        "host": "db-postgresql-fra1-10157-do-user-8671306-0.b.db.ondigitalocean.com",
+        "port": 25060
     },
     "david":{
         "username":"postgres",

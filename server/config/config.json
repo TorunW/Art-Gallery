@@ -11,7 +11,9 @@
         "password": "l87efn096vfvuw9t",
         "database": "defaultdb",
         "host": "db-postgresql-fra1-10157-do-user-8671306-0.b.db.ondigitalocean.com",
-        "port": 25060
+        "port": 25060,
+        "ssl":true,
+        "cert":"ca-certificate.crt"
     },
     "david":{
         "username":"postgres",

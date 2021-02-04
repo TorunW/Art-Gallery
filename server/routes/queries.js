@@ -11,12 +11,17 @@ console.log(config.password);
 console.log(config.port);
 console.log('**************');
 
+
 const pool = new Pool({
   user: config.username,
   host: process.env.DATABASE_URI || process.env.DATABASE_URL || config.host,
   database: config.database,
   password: config.password,
   port: config.port,
+  ssl: {
+    rejectUnauthorized: false,
+    ca: fs.readFileSync(config.cert).toString()
+  },
 })
 
 /** PICTURES */

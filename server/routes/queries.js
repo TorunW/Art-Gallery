@@ -1,5 +1,6 @@
 const Pool = require('pg').Pool;
 const path = require("path");
+var fs = require('fs');
 var env = process.env.NODE_ENV || "development";
 var config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
 
@@ -11,18 +12,22 @@ console.log(config.password);
 console.log(config.port);
 console.log('**************');
 
-
-const pool = new Pool({
+let connectionPool = {
   user: config.username,
   host: process.env.DATABASE_URI || process.env.DATABASE_URL || config.host,
   database: config.database,
   password: config.password,
-  port: config.port,
-  ssl: {
+  port: config.port
+}
+
+if (config.ssl === true){
+  connectionPool.ssl = {
     rejectUnauthorized: false,
     ca: fs.readFileSync(config.cert).toString()
-  },
-})
+  }
+}
+
+const pool = new Pool(connectionPool);
 
 /** PICTURES */
 const getPictures = (request, response) => {

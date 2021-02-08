@@ -4,7 +4,6 @@ import { SRLWrapper } from "simple-react-lightbox";
 
 
 function GallerySection(props) {
-
   const [pictures, setPictures] = useState([])
   const [ currentImgIndex, setCurrentImgIndex ] = useState(0)
   const [ isBlurred, setIsBlurred ] = useState(false); 
@@ -21,15 +20,10 @@ function GallerySection(props) {
       })
     }
   
-    function onGalleryImgClick(img, index){
-      setCurrentImgIndex(index)
-    }
-  
     const galleryDisplay = pictures.map((picture, index) => (
       <GalleryImage
           picture={picture}
           index={index}
-          onGalleryImgClick={onGalleryImgClick}
           >
       </GalleryImage>
     ))
@@ -70,7 +64,7 @@ function GallerySection(props) {
 
   function GalleryImage(props) {
 
-    const [isVisible, setIsVisible] = useState(false)
+    const [isVisible, setIsVisible] = useState(true)
 
     function onGalleryImgLoad() {
       setIsVisible(true)            

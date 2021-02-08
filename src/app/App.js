@@ -87,6 +87,7 @@ function Header(props) {
 function SectionsContainer(props) {
 
   const sectionsDisplay = props.navigation.map((section,index) => {
+    
       let sectionHtmlDisplay = (
         <section key={index} id={section.nav_link}>
           <h2>{section.title}</h2>

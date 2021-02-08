@@ -1,92 +1,58 @@
-/* imports */
-
+// Create express app
 var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
 var path = require('path');
-var cors = require('cors');
+var app = express();
 var fileUpload = require('express-fileupload');
-var fs = require('fs');
+var cors = require('cors');
 
-/* /imports */
+// Body Parser
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-/* setup */
-
-require('dotenv').config();
-
+// cors
 app.use(cors());
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-)
 
+// Serve static files
 app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/uploads'));
 
-/* setup */
+// file upload
+app.use(fileUpload())
 
-/* routes - move to routes & controllers! */
-
-var routes = require('./server/routes/queries');
-
-app.get(['/','/admin'], function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// Root endpoint
+app.get(["/","/admin"], (req, res, next) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.get('/pictures', routes.getPictures)
-app.get('/pictures/:picture_type', routes.getPicturesByType)
-app.post('/pictures', routes.createPicture)
-app.delete('/pictures/:id', routes.deletePicture)
-app.put('/pictures/:id', routes.updatePicture)
+// API endpoints
+var routes = require('./server/routes/routes.js')(app);
 
-app.get('/navigation', routes.getNavigation)
+app.post('/upload',function(req, res){
+    if (!req.files) {
+        return res.status(500).send({ msg: "file is not found" })
+    }
+    // accessing the file
+    const myFile = req.files.file;
+    //  mv() method places the file inside public directory
+    myFile.mv(`${__dirname}/uploads/pictures/${myFile.name}`, function (err) {
+        if (err) {
+            return res.status(500).send({ msg: "Error occured" });
+        }
+        // returing the response with file path and name
+        return res.send({name: myFile.name, path: `pictures/${myFile.name}`});
+    });
+});
 
-app.post('/messages', routes.createMessage)
-app.get('/messages', routes.getMessages)
-app.get('/countreadmsg', routes.countReadMsg)
-app.put('/messages/:id', routes.updateMessages)
-app.delete('/messages/:id', routes.deleteMessage)
+// Default response for any other request
+app.use(function(req, res){
+    res.status(404);
+});
 
-app.get('/about', routes.getAbout)
-app.put('/about', routes.updateAbout)
+// Server port
+var HTTP_PORT = 34296;
 
-app.get('/tables', routes.getTableNames)
-
-// file upload api
-app.post('/upload', (req, res) => {
-  if (!req.files) {
-      return res.status(500).send({ msg: "file is not found" })
-  }
-  // accessing the file
-  const myFile = req.files.file;
-  //  mv() method places the file inside public directory
-  myFile.mv(`${__dirname}/uploads/pictures/${myFile.name}`, function (err) {
-      if (err) {
-          return res.status(500).send({ msg: "Error occured" });
-      }
-      // returing the response with file path and name
-      return res.send({name: myFile.name, path: `/pictures/${myFile.name}`});
-  });
-})
-
-app.post('/delete', (req, res) => {
-  try {
-    fs.unlinkSync('uploads/' +req.body.path)
-    //file removed
-    return res.send({msg:'success'});
-  } catch(err) {
-    console.error(err)
-  }
-})
-
-/* / routes - should be moved to routes & controllers */
-
-let PORT = process.env.PORT;
-if (PORT == null || PORT == "") PORT = 34296;
-
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-  console.log(`DB URI ${process.env.DATABASE_URI}`)
+// Start server
+app.listen(HTTP_PORT, () => {
+    console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
 });

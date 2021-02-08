@@ -14,7 +14,6 @@ function DBTableRender(props) {
     const [selectedItem, setSelectedItem] = useState(null)
     const [sortBy, setSortBy] = useState('created_at')
     const [messages, setMessages] = useState([])
-    console.log(messages)
 
     useEffect(() => {
         getItems()
@@ -83,7 +82,7 @@ function DBTableRender(props) {
     function deleteItem(item) {
       console.log("delete")
         $.ajax({
-            url:'http://localhost:34296'+ props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
+            url:props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
             type:'DELETE'
           }).done(function(res) {
             beforeGetItems('delete', item, 'success')
@@ -92,9 +91,9 @@ function DBTableRender(props) {
 
     function onReadButtonClick(item) {
         $.ajax({
-            url:'http://localhost:34296'+ props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
+            url:props.fetchUrl + '/' + (item.picture_id ? item.picture_id : item.msg_id),
             type:'PUT', 
-            data: {read:(item.read === true ? false : true)}
+            data: {read:(item.read === 'true' ? 'false' : 'true')}
           }).done(function(res) {
             getItems();
           })
@@ -107,7 +106,6 @@ function DBTableRender(props) {
     }
  
     function beforeGetItems(action, item, type) {
-      console.log(action, item, type)
       const itemType = item.picture_id > -1 ? 'Bilden' : 'Meddelande';
       let title = itemType + ' '
       if (itemType === 'Bilden') {
@@ -142,7 +140,7 @@ function DBTableRender(props) {
     }
 
     const itemsDisplay = items.sort(sortItems).map((item, index) => (
-      <tr className={item.read === true ? 'read' : ''} key={index}>
+      <tr className={item.read === 'true' ? 'read' : ''} key={index}>
         {columns.map((column, index) => {
           if (column.menuOnly === false) {
             let cellDisplay = item[column.columnName];
@@ -175,22 +173,26 @@ function DBTableRender(props) {
       </tr>
     ))
 
+    let addButtonDisplay;
+    if (props.fetchUrl === '/pictures') {
+      addButtonDisplay = (
+        <a onClick={() => setShowForm(true)}className="ui green basic button add-img-button">
+          <i className="plus icon"></i>
+          Lägg till bild
+        </a>
+      )
+    }
+
     let tableDisplay, formDisplay;
     if (showForm === false) {
-      console.log(items)
       if (items.length === 0) {
-        tableDisplay = 'Inga meddelanden'
-      } else {
-        let addButtonDisplay;
-        if (props.fetchUrl === '/pictures') {
-          addButtonDisplay = (
-            <a onClick={() => setShowForm(true)}className="ui green basic button add-img-button">
-              <i className="plus icon"></i>
-              Lägg till bild
-            </a>
-          )
-        }
-  
+        tableDisplay = (
+          <div>
+            Inga meddelanden<br/>
+            {addButtonDisplay}
+          </div>
+        )
+      } else {  
         let loadingDisplay;
         if (loading === true) {
           loadingDisplay = (
@@ -284,7 +286,7 @@ function TableRowUserMenu(props) {
     } else {
         readButtonDisplay = (
             <button className="ui icon button" onClick={()=> props.onReadButtonClick(props.item)}>
-              <i className={'envelope ' + (props.item.read === true ? 'open' : '') + '  outline icon'}></i>
+              <i className={'envelope ' + (props.item.read === 'true' ? 'open' : '') + '  outline icon'}></i>
             </button>)
     }
     

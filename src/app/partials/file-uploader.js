@@ -14,7 +14,7 @@ function FileUpload(props) {
 
     const el = useRef(); // accesing input element
 
-    useEffect(()=> {
+    useEffect(()=> { 
         if (file !== '') uploadFile()
     },[file])
 
@@ -35,7 +35,7 @@ function FileUpload(props) {
     const uploadFile = () => {
         const formData = new FormData();
         formData.append('file', file); // appending file
-        axios.post('http://localhost:34296/upload', formData, {
+        axios.post('/upload', formData, {
             onUploadProgress: (ProgressEvent) => {
                 let progress = Math.round(
                 ProgressEvent.loaded / ProgressEvent.total * 100);
@@ -43,7 +43,7 @@ function FileUpload(props) {
             }
         }).then(res => {
             getFile({ name: res.data.name,
-                     path: "http://localhost:34296" + res.data.path
+                     path: "/" + res.data.path
                    })
             props.updateInput(res.data.path)
         }).catch(err => console.log(err))}

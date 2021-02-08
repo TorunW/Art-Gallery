@@ -17,10 +17,10 @@ function Admin(props) {
 
   function countMsg() {
     $.ajax({
-      url:'http://localhost:34296/countreadmsg',
+      url:'/countreadmsg',
       type:'GET'
     }).done(function(res) {
-      setMsgCounter(res[0].count);
+      setMsgCounter(res[0]['COUNT(*)']);
     })
   }
 
@@ -28,7 +28,7 @@ function Admin(props) {
     let menuItemclassName = 'item';
     if (currentSection === table) menuItemclassName += ' active';
     let msgCounterDisplay;
-    if (table === 'messages' && msgCounter !== '0') {
+    if (table === 'messages' && msgCounter !== 0) {
       msgCounterDisplay = (
         <Label color='red' floating>
           {msgCounter}
@@ -44,7 +44,7 @@ function Admin(props) {
     )
   })
 
-  let contentDisplay = 'hello im admin'
+  let contentDisplay = <p>hello im admin</p>
   if (currentSection !== "admin"){
     contentDisplay = dbTables.map((table, index) => {
       if (currentSection === table) {
@@ -60,12 +60,14 @@ function Admin(props) {
 
   return(
     <section id="admin">
-      <Menu compact>
-          <Menu.Item as='a' className={mainMenuItemclassNameName} onClick={() => setCurrentSection("admin")}>
-            Admin main
-          </Menu.Item>
-          {navItemsDisplay}
-      </Menu>
+      <div>
+        <Menu compact>
+            <Menu.Item as='a' className={mainMenuItemclassNameName} onClick={() => setCurrentSection("admin")}>
+              Admin main
+            </Menu.Item>
+            {navItemsDisplay}
+        </Menu>
+      </div>
       {contentDisplay}
     </section>
   )

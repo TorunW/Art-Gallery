@@ -6,7 +6,6 @@ import TextEditor from './textEditor';
 import { renderDisplayName } from '../helpers';
 
 function ItemForm(props) {
-
     let initFormData = props.selectedItem !== null ? props.selectedItem : {};
     const [formData, setFormData] = useState(initFormData)
     const [errors, setErrors] = useState([])
@@ -56,6 +55,7 @@ function ItemForm(props) {
     }
   
     function onFormSubmit() {
+
       let ajaxUrl = props.fetchUrl;
       let ajaxType = 'POST';
       let action = 'create'
@@ -64,7 +64,7 @@ function ItemForm(props) {
         ajaxType = 'PUT'
         action = 'update'
       }
-  
+
       $.ajax({
         url:ajaxUrl,
         type:ajaxType,
@@ -163,11 +163,8 @@ function ItemForm(props) {
 
     function onImgLoad(e) {
       const parentDivHeight = document.getElementById('item-img').offsetHeight;
-      console.log(parentDivHeight);
       const imgHeight = e.target.clientHeight
-      console.log(imgHeight);
       const newImgMarginTop = (parentDivHeight - imgHeight) / 2;
-      console.log(newImgMarginTop)
       setImgMarginTop(newImgMarginTop)
   } 
   

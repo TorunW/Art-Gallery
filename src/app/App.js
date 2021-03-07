@@ -124,9 +124,9 @@ function SectionsContainer(props) {
           )
           break;
         default:
-        sectionHtmlDisplay = (
-          <Route exact path="/"><GallerySection/></Route>
-        )
+          sectionHtmlDisplay = (
+            <Route exact path="/"><GallerySection/></Route>
+          )
           break;
       }
 
@@ -147,7 +147,7 @@ function SectionsContainer(props) {
     <main>
       {sectionsDisplay}
       {adminSectionDisplay}
-      <Route exact path="/signin">
+      <Route exact path={["/signin","/signin-fail"]}>
         <UserSignin/>
       </Route>
     </main>
@@ -302,6 +302,7 @@ function postMessage() {
     type:'POST',
     data: {name:name, email:email, msg:message }
   }).done(function(res) {
+    console.log(res);
     setIsSubmitted(true)
     setTimeout(() => {
       window.location.href = '/'

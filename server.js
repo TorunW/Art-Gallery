@@ -1,5 +1,8 @@
 // Create express app
 var express = require('express');
+var passport   = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var session    = require('express-session');
 var path = require('path');
 var app = express();
 var fileUpload = require('express-fileupload');
@@ -9,6 +12,11 @@ var cors = require('cors');
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// passport & session
+app.use(session({ secret: 'keyboard cat',resave: false, saveUninitialized:true})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 // cors
 app.use(cors());
@@ -21,13 +29,26 @@ app.use(express.static(__dirname + '/uploads'));
 app.use(fileUpload())
 
 // Root endpoint
-app.get(["/","/admin"], (req, res, next) => {
+app.get(["/","/signin"], (req, res, next) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-// API endpoints
-var routes = require('./server/routes/routes.js')(app);
+// models
+var models = require('./server/models/');
 
+// routes
+var routes = require('./server/routes/routes.js')(app,passport);
+
+// load passport strategies
+require('./server/config/passport/passport.js')(passport, models.user);
+ 
+// sync Database
+models.sequelize.sync().then(function() {
+    console.log('Nice! Database looks fine')
+}).catch(function(err) {
+    console.log(err, "Something went wrong with the Database Update!")
+});
+ 
 app.post('/upload',function(req, res){
     if (!req.files) {
         return res.status(500).send({ msg: "file is not found" })

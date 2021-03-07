@@ -11,17 +11,29 @@ exports.getAbout = (req, res) => {
   });
 }
   
-exports.updateAbout = (request, response) => {
-    const id = parseInt(request.params.id)
-    const { about_text, profile_img, about_id } = request.body
-    pool.query(
-      'UPDATE about SET about_text = $1, profile_img = $2 WHERE about_id = 1',
-      [about_text, profile_img],
-      (error, results) => {
-        if (error) {
-          throw error
-        }
-        response.status(200).send(`Modified with ID: ${id}`)
-      }
-    )
-  }
+exports.updateAbout = function(req,res){
+    var data = {
+        about_text: req.body.about_text,
+        profile_img: req.body.profile_img,
+    }
+    console.log(data);
+    db.run(
+        `UPDATE about set 
+           about_text = COALESCE(?,about_text), 
+           profile_img = COALESCE(?,profile_img)
+           WHERE about_id = 1`,
+        [data.about_text, data.profile_img ],
+        function (err, result) {
+          console.log(err);
+          console.log(result);
+            if (err){
+                res.status(400).json({"error": res.message})
+                return;
+            }
+            res.json({
+                message: "success",
+                data: data,
+                changes: this.changes
+            })
+    });
+}

@@ -64,7 +64,6 @@ function ItemForm(props) {
         ajaxType = 'PUT'
         action = 'update'
       }
-
       $.ajax({
         url:ajaxUrl,
         type:ajaxType,

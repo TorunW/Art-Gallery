@@ -10,13 +10,17 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
     "axios": "^0.21.1",
+    "bcrypt-nodejs": "0.0.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
+    "express-session": "^1.17.1",
     "jquery": "^3.5.1",
     "md5": "^2.3.0",
     "methods": "^1.1.2",
     "nodemon": "^2.0.7",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "react": "^17.0.1",
     "react-device-detect": "^1.15.0",
     "react-dom": "^17.0.1",
@@ -25,6 +29,7 @@
     "react-scripts": "4.0.2",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",
+    "sequelize": "^6.5.0",
     "simple-react-lightbox": "^3.6.2",
     "sqlite3": "^5.0.1",
     "web-vitals": "^1.1.0"
@@ -53,5 +58,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "session-file-store": "^1.5.0",
+    "uuid": "^8.3.2"
   }
 }
